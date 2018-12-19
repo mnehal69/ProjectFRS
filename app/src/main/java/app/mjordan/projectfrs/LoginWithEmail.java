@@ -95,7 +95,7 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    void fetch(){
+     public void fetch(){
         //LoginDataSend data=new LoginDataSend(user,pass);
         //LoginDataList.add(data);
         //Gson gs=new Gson();
