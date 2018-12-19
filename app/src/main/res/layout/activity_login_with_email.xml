@@ -82,6 +82,7 @@
             />
     </android.support.design.widget.TextInputLayout>
         <Button
+            android:id="@+id/LoginBtn"
             android:background="@drawable/login_button"
             android:layout_marginTop="50sp"
             android:layout_gravity="center_horizontal"
