@@ -96,6 +96,7 @@
         android:layout_height="wrap_content"
             android:layout_marginTop="10sp">
         <Button
+            android:id="@+id/ForgetPass"
             android:background="@drawable/dashed_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -108,6 +109,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/RegisterLogin"
         android:background="@drawable/login_button"
         android:layout_marginTop="30sp"
         android:layout_gravity="center_horizontal"

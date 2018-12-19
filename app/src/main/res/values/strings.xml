@@ -12,4 +12,8 @@
     <string name="new_to_mukbang_signup">New to MukBang? SignUp</string>
     <string name="why_not_login_later">Why not Login Later?</string>
     <string name="close_icon">Close Icon</string>
+    <string name="register_val">Register</string>
+    <string name="username">UserName</string>
+    <string name="register_with_mukbang_account">Register with MukBang Account</string>
+    <string name="address">Address</string>
 </resources>
