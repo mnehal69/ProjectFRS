@@ -8,4 +8,8 @@
     <string name="logoimg">LogoImg</string>
     <string name="password">Password</string>
     <string name="login_text">Let\'s Login</string>
+    <string name="forget_password">Forget password?</string>
+    <string name="new_to_mukbang_signup">New to MukBang? SignUp</string>
+    <string name="why_not_login_later">Why not Login Later?</string>
+    <string name="close_icon">Close Icon</string>
 </resources>

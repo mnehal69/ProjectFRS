@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -37,7 +36,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:background="@drawable/gradient_background">
+        android:background="@color/BackgroundTransparent">
         <Button
             android:drawablePadding="10sp"
             android:drawableStart="@drawable/facebook_logo"
@@ -47,7 +46,7 @@
             android:background="@drawable/button"
             android:textColor="#fff"
             android:text="@string/facebook_login_text"
-            android:textSize="16sp"
+            android:textSize="12.5sp"
             android:textStyle="bold"/>
         <Button
             android:drawableStart="@drawable/ic_email_black_24dp"
@@ -61,6 +60,19 @@
             android:textStyle="bold"
             android:text="@string/continue_with_email"
             android:backgroundTint="#e8696969"
-            android:textSize="16sp"/>
+            android:textSize="12.5sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="15sp">
+            <TextView
+                android:textSize="12sp"
+                android:textColor="#fff"
+                android:text="@string/why_not_login_later"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

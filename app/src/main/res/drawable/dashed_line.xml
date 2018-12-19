@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#fff">
+    <item>
+        <shape android:shape="rectangle" />
+    </item>
+    <item android:top="15sp">
+    <shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="line">
+
+    <stroke
+        android:color="@color/Card"
+        android:dashWidth="60px"
+        android:dashGap="40px"
+        android:width="2dp"/>
+    </shape>
+    </item>
+</ripple>
