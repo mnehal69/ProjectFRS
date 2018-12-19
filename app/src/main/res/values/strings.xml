@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Mukbang</string>
+    <string name="facebook_login_text">Login With Facebook</string>
+    <string name="continue_with_email">Continue With Email</string>
+    <string name="login_with_mukbang_account">Login with MukBang account</string>
+    <string name="email_or_username">Email or Username</string>
+    <string name="be_foodie_and_do_mukbang">Be Foodie and Mukbang</string>
+    <string name="logoimg">LogoImg</string>
+    <string name="password">Password</string>
+    <string name="login_text">Let\'s Login</string>
+</resources>

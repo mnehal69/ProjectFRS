@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="70sp"
+    android:background="@color/Background">
+    <ImageButton
+        android:id="@+id/close_btn"
+        android:background="@drawable/menu_btn"
+        android:layout_marginStart="10sp"
+        android:src="@drawable/ic_close_red_24dp"
+        android:layout_width="40sp"
+        android:layout_height="match_parent" />
+</RelativeLayout>

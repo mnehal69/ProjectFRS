@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="Transparent">#00243b55</color>
+    <color name="LauncherBackground">#017A69</color>
+    <color name="colorPrimary">#3F50B4</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF3F80</color>
+    <color name="StatusBar">#000000</color>
+    <color name="AppBar">#212121</color>
+    <color name="Background">#303030</color>
+    <color name="BackgroundTransparent">#60303030</color>
+    <color name="Dialog">#424242</color>
+    <color name="ErrorDialog">#B00020</color>
+    <color name="PrimaryText">#FFFFFF</color>
+    <color name="SecondaryText">#B3FFFFFF</color>
+    <color name="Disabled">#80FFFFFF</color>
+    <color name="Divider">#1FFFFFFF</color>
+    <color name="Card">#009688</color>
+    <color name="FacebookBackground">#2b4170</color>
+</resources>
