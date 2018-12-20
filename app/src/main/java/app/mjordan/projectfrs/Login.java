@@ -1,7 +1,10 @@
 package app.mjordan.projectfrs;
 
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -30,6 +33,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             startActivity(EmailActivity);
             break;
             case R.id.facebook:
+                FragmentManager fm=getSupportFragmentManager();
+                LoadingDialog loadingDialog=new LoadingDialog();
+                loadingDialog.show(fm,"Dialog Fragment");
                 break;
         }
     }

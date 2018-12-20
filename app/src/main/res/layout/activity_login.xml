@@ -48,6 +48,7 @@
             android:text="@string/facebook_login_text"
             android:textSize="12.5sp"
             android:textStyle="bold"/>
+
         <Button
             android:drawableStart="@drawable/ic_email_black_24dp"
             android:id="@+id/email"

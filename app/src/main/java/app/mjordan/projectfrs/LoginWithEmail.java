@@ -33,7 +33,7 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
     EditText username,password;
     ImageButton closeBtn;
     Button ForgetBtn,RegisterBtn,LoginBtn;
-    String user,pass,server_url;
+    String user,pass,server_url="http://192.168.10.5:8081/FRS/index.php";
     ArrayList<LoginDataSend> LoginDataList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,15 +74,22 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
     boolean Check_Input(){
         user=username.getText().toString();
         pass=password.getText().toString();
-        if(user.equals("")){
-            Toast.makeText(getApplicationContext(),"UserField is empty",Toast.LENGTH_SHORT).show();
+        if(user.equals("") && pass.equals("") ){
+            Toast.makeText(getApplicationContext(), "UserField And PassField is empty", Toast.LENGTH_SHORT).show();
             username.getBackground().setColorFilter(getResources().getColor(R.color.ErrorDialog), PorterDuff.Mode.SRC_ATOP);
-            return false;
-        }
-        if( pass.equals("")){
-            Toast.makeText(getApplicationContext(),"PassField is empty",Toast.LENGTH_SHORT).show();
             password.getBackground().setColorFilter(getResources().getColor(R.color.ErrorDialog), PorterDuff.Mode.SRC_ATOP);
             return false;
+        }else {
+            if (user.equals("")) {
+                Toast.makeText(getApplicationContext(), "UserField is empty", Toast.LENGTH_SHORT).show();
+                username.getBackground().setColorFilter(getResources().getColor(R.color.ErrorDialog), PorterDuff.Mode.SRC_ATOP);
+                return false;
+            }
+            if (pass.equals("")) {
+                Toast.makeText(getApplicationContext(), "PassField is empty", Toast.LENGTH_SHORT).show();
+                password.getBackground().setColorFilter(getResources().getColor(R.color.ErrorDialog), PorterDuff.Mode.SRC_ATOP);
+                return false;
+            }
         }
         return true;
     }
@@ -113,6 +120,7 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.d("zxc",error.getMessage());
                 Log.d("zxc error:","That didn't work!");
             }
         }) {
@@ -131,6 +139,8 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
+
+
         switch (view.getId()) {
             case R.id.LoginBtn:
                boolean checked=Check_Input();
