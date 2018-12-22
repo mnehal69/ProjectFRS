@@ -44,6 +44,7 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
     TextInputLayout userEmailLayout,PassLayout;
     Fragment prev;
     LoadingDialog loadingDialog;
+    MKB_DB dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +87,8 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
                 }
             }
         });
+
+        dbHelper = new MKB_DB(this);
     }
 
 
@@ -153,10 +156,13 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
                                          password.setError("Incorrect Password");
                                          password.getBackground().setColorFilter(getResources().getColor(R.color.ErrorDialog), PorterDuff.Mode.SRC_ATOP);
                                      } else {
-                                         //Log.d("sadder yeah", String.valueOf(jObject.getJSONObject("User")));
+                                         Log.d("sadder yeah", String.valueOf(jObject.getJSONObject("User")));
                                          JSONObject User = jObject.getJSONObject("User");
+                                         dbHelper.Insert_IsLogged(User.getString("ID"));
+                                         Log.d("sadder COUNT", String.valueOf(dbHelper.getCount()));
+                                         Log.d("sadder USERIDROW",dbHelper.get_UserLoggedID());
                                          Intent main = new Intent(LoginWithEmail.this, MainActivity.class);
-
+                                         main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                          startActivity(main);
                                      }
 
