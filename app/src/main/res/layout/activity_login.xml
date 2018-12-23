@@ -68,7 +68,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginTop="15sp">
-            <TextView
+            <Button
+                android:background="@drawable/dashed_line"
                 android:textSize="12sp"
                 android:textColor="#fff"
                 android:text="@string/why_not_login_later"

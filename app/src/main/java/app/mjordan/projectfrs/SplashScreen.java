@@ -1,21 +1,15 @@
 package app.mjordan.projectfrs;
 
-import android.content.Context;
+
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Build;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -42,7 +36,7 @@ public class SplashScreen extends AppCompatActivity {
         helperClass=new HelperClass(this);
         Log.d("sadder", String.valueOf(dbHelper.getCount()));
         if(dbHelper.getCount()==0) {
-            Intent next = new Intent(this, Login.class); //This is used to move to next activity
+            Intent next = new Intent(this, MainActivity.class); //This is used to move to next activity
             startActivity(next);
             finish();
         }else{
@@ -90,7 +84,7 @@ public class SplashScreen extends AppCompatActivity {
             }) {
 
                 @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
+                protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<>();
                     params.put("ID",UserID);
                     return params;

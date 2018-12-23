@@ -1,11 +1,7 @@
 package app.mjordan.projectfrs;
 
-import android.app.Fragment;
-import android.content.Context;
+
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +14,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -134,7 +129,7 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
             }) {
 
                 @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
+                protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<>();
                     params.put("Email",email);
                     return params;
@@ -194,7 +189,7 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
             }) {
 
                 @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
+                protected Map<String, String> getParams()  {
                     Map<String, String> params = new HashMap<>();
                     params.put("Email",email);
                     params.put("Password",pass);

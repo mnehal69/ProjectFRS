@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:gravity="center"
     android:background="@color/Background">
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
     <Button
         android:textColor="#fff"
         android:textSize="20sp"
-        android:text="LogOuT"
+        android:text="@string/logout"
         android:id="@+id/SignOut"
         android:background="@drawable/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-</LinearLayout>
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/Fragment"
+        android:name="app.mjordan.projectfrs.BottomNavBar"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout="@layout/bottom_nav" />
+</RelativeLayout>

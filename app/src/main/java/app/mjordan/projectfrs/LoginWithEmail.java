@@ -1,15 +1,13 @@
 package app.mjordan.projectfrs;
 import android.app.Fragment;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
-import android.graphics.PorterDuff;
+
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -18,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -52,7 +49,7 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
 
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(getResources().getColor(R.color.Background));
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.Background));
 
         username = (EditText) findViewById(R.id.UName);
         password=(EditText) findViewById(R.id.PName);
@@ -153,7 +150,7 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
              }) {
 
                  @Override
-                 protected Map<String, String> getParams() throws AuthFailureError {
+                 protected Map<String, String> getParams(){
                      Map<String, String> params = new HashMap<>();
                      params.put("UEmail", user);
                      params.put("Pass", pass);

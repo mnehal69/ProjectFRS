@@ -7,12 +7,13 @@ import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.FragmentManager;
+
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import app.mjordan.projectfrs.R;
+
 
 public class HelperClass {
     private Context mContext;
@@ -29,12 +30,10 @@ public class HelperClass {
          * THIS CHECK IF BOTH THE FIELD IS NOT EMPTY
          * AND SETTING THE ERROR AND COLOR OF BACKGROUND TINT AS RED
          * */
-
-        String editval = editText.getText().toString().trim();
         if(!(error==null)) {
             editText.setError(error);
         }
-        editText.getBackground().setColorFilter(mContext.getResources().getColor(id), PorterDuff.Mode.SRC_ATOP);
+        editText.getBackground().setColorFilter(ContextCompat.getColor(mContext, id), PorterDuff.Mode.SRC_ATOP);
     }
 
     boolean CheckEmpty(EditText editText){

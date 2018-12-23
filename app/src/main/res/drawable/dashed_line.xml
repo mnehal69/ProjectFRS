@@ -4,11 +4,11 @@
 
     <item android:top="20sp">
     <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="line">
+    android:shape="line" >
 
     <stroke
         android:color="@color/Card"
-        android:dashWidth="60px"
+        android:dashWidth="5px"
         android:dashGap="40px"
         android:width="2dp"/>
     </shape>

@@ -15,15 +15,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Security;
-import java.security.acl.LastOwnerException;
 import java.util.Properties;
 
-/**
- * Created by Vishal on 6/20/2017.
- */
+
 
 public class GmailSender extends javax.mail.Authenticator {
-    private String mailhost = "smtp.gmail.com";
     private String user;
     private String password;
     private Session session;
@@ -32,12 +28,13 @@ public class GmailSender extends javax.mail.Authenticator {
         Security.addProvider(new JSSEProvider());
     }
 
-    public GmailSender(String user, String password) {
+    GmailSender(String user, String password) {
         this.user = user;
         this.password = password;
 
         Properties props = new Properties();
         props.setProperty("mail.transport.protocol", "smtp");
+        String mailhost = "smtp.gmail.com";
         props.setProperty("mail.host", mailhost);
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.port", "465");
@@ -54,7 +51,7 @@ public class GmailSender extends javax.mail.Authenticator {
         return new PasswordAuthentication(user, password);
     }
 
-    public synchronized void sendMail(String subject, String body, String sender, String recipients) throws Exception {
+    public synchronized void sendMail(String subject, String body, String sender, String recipients)  {
         try{
             MimeMessage message = new MimeMessage(session);
             DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
@@ -75,16 +72,13 @@ public class GmailSender extends javax.mail.Authenticator {
         private byte[] data;
         private String type;
 
-        public ByteArrayDataSource(byte[] data, String type) {
+        private ByteArrayDataSource(byte[] data, String type) {
             super();
             this.data = data;
             this.type = type;
         }
 
-        public ByteArrayDataSource(byte[] data) {
-            super();
-            this.data = data;
-        }
+
 
         public void setType(String type) {
             this.type = type;
