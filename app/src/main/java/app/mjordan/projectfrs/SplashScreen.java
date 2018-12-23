@@ -30,14 +30,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SplashScreen extends AppCompatActivity {
-    private String server_url="http://192.168.10.4:8081/FRS/user/check.php";
+    private String server_url;
+    HelperClass helperClass;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MKB_DB dbHelper = new MKB_DB(this);
         Window window = getWindow();
-
+        server_url=getResources().getString(R.string.website)+"user/check.php";
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //Use to wake screen on this app
+        helperClass=new HelperClass(this);
         Log.d("sadder", String.valueOf(dbHelper.getCount()));
         if(dbHelper.getCount()==0) {
             Intent next = new Intent(this, Login.class); //This is used to move to next activity
@@ -49,18 +51,10 @@ public class SplashScreen extends AppCompatActivity {
         }
     }
 
-    public boolean Check_Internet(){
-        ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo nInfo = cm.getActiveNetworkInfo();
-        boolean connected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
-        if(!connected) {
-            Toast.makeText(getApplicationContext(), "No Internet Connected", Toast.LENGTH_SHORT).show();
-        }
-        return connected;
-    }
+
 
     public void fetch(final String UserID) {
-        if (Check_Internet()) {
+        if (helperClass.Check_Internet()) {
             // Instantiate the RequestQueue.
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
             // Request a string response from the provided URL.

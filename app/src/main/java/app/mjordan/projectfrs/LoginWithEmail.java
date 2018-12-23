@@ -26,13 +26,10 @@ import com.android.volley.VolleyError;
 
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonArray;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,15 +37,18 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
     EditText username,password;
     ImageButton closeBtn;
     Button ForgetBtn,RegisterBtn,LoginBtn;
-    String user,pass,server_url="http://192.168.10.4:8081/FRS/user/read.php";
+    String server_url;
     TextInputLayout userEmailLayout,PassLayout;
     Fragment prev;
     LoadingDialog loadingDialog;
     MKB_DB dbHelper;
+    HelperClass helperClass;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_with_email);
+
+        server_url=getResources().getString(R.string.website)+"user/read.php";
 
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -66,14 +66,17 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
         closeBtn.setOnClickListener(this);
         RegisterBtn.setOnClickListener(this);
         LoginBtn.setOnClickListener(this);
+        ForgetBtn.setOnClickListener(this);
         prev = getFragmentManager().findFragmentByTag("loading_dialog");
         loadingDialog = new LoadingDialog();
+
+         helperClass=new HelperClass(this);
+
         username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    userEmailLayout.setErrorEnabled(false);;
-                    username.getBackground().setColorFilter(getResources().getColor(R.color.Card), PorterDuff.Mode.SRC_ATOP);
+                    helperClass.Input_Error(username,null,R.color.Card);
                 }
             }
         });
@@ -82,8 +85,7 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    PassLayout.setErrorEnabled(false);
-                    password.getBackground().setColorFilter(getResources().getColor(R.color.Card), PorterDuff.Mode.SRC_ATOP);
+                    helperClass.Input_Error(password,null,R.color.Card);
                 }
             }
         });
@@ -93,50 +95,19 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
 
 
 
-    boolean Check_Input(){
-        /*
-        * THIS CHECK IF BOTH THE FIELD IS NOT EMPTY
-        * AND SETTING THE ERROR AND COLOR OF BACKGROUND TINT AS RED
-        * */
-        user=username.getText().toString().trim();
-        pass=password.getText().toString().trim();
-        if(user.equals("") && pass.equals("") ){
-
-            username.setError(" Username Field Empty");
-            password.setError(" Password Field Empty");
-            username.getBackground().setColorFilter(getResources().getColor(R.color.ErrorDialog), PorterDuff.Mode.SRC_ATOP);
-            password.getBackground().setColorFilter(getResources().getColor(R.color.ErrorDialog), PorterDuff.Mode.SRC_ATOP);
-            return false;
-        }else {
-            if (user.equals("")) {
-               username.setError(" Username Field Empty");
-                username.getBackground().setColorFilter(getResources().getColor(R.color.ErrorDialog), PorterDuff.Mode.SRC_ATOP);
-                return false;
-            }
-            if (pass.equals("")) {
-                password.setError(" Password Field Empty");
-                password.getBackground().setColorFilter(getResources().getColor(R.color.ErrorDialog), PorterDuff.Mode.SRC_ATOP);
-                return false;
-            }
-        }
-        return true;
-    }
 
 
-     public void fetch() {
+
+     public void fetch(final String user, final String pass) {
          /*
           *
           * VOLLEY PASS THE PARAMETER (WHICH ARE IN GET_PARAMS) TO SERVER_URL
           * USTING GET OR POST METHOD AND THEN RECEIVE THE RESPONSE OF THE WEBSITE
           * */
-         if (prev == null) {
-             //STARTING THE LOADING_DIALOG DIALOG FRAGMENT IN WHICH
-             // THERE IS A PROGRESS BAR WHICH SHOWED FOR PROCESS
-             FragmentManager fm = getSupportFragmentManager();
-             loadingDialog.show(fm, "loading_dialog");
-             Log.d("sadder", "load");
-         }
-         if (Check_Internet()) {
+
+         final FragmentManager fm = getSupportFragmentManager();
+         helperClass.load_Fragment(true,fm);
+         if (helperClass.Check_Internet()) {
              // Instantiate the RequestQueue.
              RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
              // Request a string response from the provided URL.
@@ -146,41 +117,38 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
                          public void onResponse(String response) {
                              // Display the first 500 characters of the response string.
 
-                             Log.d("sadder msg:", response);
+                             //Log.d("sadder msg:", response);
                              try {
                                  JSONObject jObject = new JSONObject(response);
                                  boolean notFound = jObject.getBoolean("IsEmpty");
                                  if (!notFound) {
                                      boolean samePass = jObject.getBoolean("SamePass");
                                      if (!samePass) {
-                                         password.setError("Incorrect Password");
-                                         password.getBackground().setColorFilter(getResources().getColor(R.color.ErrorDialog), PorterDuff.Mode.SRC_ATOP);
+                                         helperClass.Input_Error(password,"Incorrect Password",R.color.ErrorDialog);
                                      } else {
-                                         Log.d("sadder yeah", String.valueOf(jObject.getJSONObject("User")));
+
                                          JSONObject User = jObject.getJSONObject("User");
                                          dbHelper.Insert_IsLogged(User.getString("ID"));
-                                         Log.d("sadder COUNT", String.valueOf(dbHelper.getCount()));
-                                         Log.d("sadder USERIDROW",dbHelper.get_UserLoggedID());
                                          Intent main = new Intent(LoginWithEmail.this, MainActivity.class);
                                          main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                          startActivity(main);
                                      }
 
                                  } else {
-                                     Toast.makeText(getApplicationContext(), "User Not Found", Toast.LENGTH_SHORT).show();
+                                     helperClass.Input_Error(username,"Invalid Email",R.color.ErrorDialog);
                                  }
 
                              } catch (JSONException e) {
                                  e.printStackTrace();
                              }
-                             loadingDialog.dismiss();
+                             helperClass.load_Fragment(false,fm);
                          }
                      }, new Response.ErrorListener() {
                  @Override
                  public void onErrorResponse(VolleyError error) {
                      Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
-                     Log.d("sadder error:", "That didn't work!");
-                     loadingDialog.dismiss();
+                     //Log.d("sadder error:", "That didn't work!");
+                     helperClass.load_Fragment(false,fm);
                  }
              }) {
 
@@ -195,43 +163,38 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
              // Add the request to the RequestQueue.
              queue.add(stringRequest);
          }else{
-             loadingDialog.dismiss();
+             helperClass.load_Fragment(false,fm);
          }
      }
-    void ClearFocus(){
+    void ClearFocus(EditText editText){
         /*
         * This fuction is used to unfocus both edit text and called when user
         * click login button in LoginWithEmail Screen
         *
          */
-        username.clearFocus();
-        password.clearFocus();
+        editText.clearFocus();
     }
-    public boolean Check_Internet(){
-        ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo nInfo = cm.getActiveNetworkInfo();
-        boolean connected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
-        if(!connected) {
-            Toast.makeText(getApplicationContext(), "No Internet Connected", Toast.LENGTH_SHORT).show();
-        }
-        return connected;
-    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.LoginBtn:
-               boolean checked=Check_Input();
-                if (checked) {
-                    ClearFocus();
-                    fetch();
-                } else {
-                    Log.d("sadder", "nope send");
+               boolean checked=!(helperClass.CheckEmpty(username) || helperClass.CheckEmpty(password));
+
+               if (checked) {
+                    ClearFocus(username);
+                    ClearFocus(password);
+                    String user=username.getText().toString();
+                    String pass=password.getText().toString();
+                    fetch(user,pass);
                 }
                 break;
             case R.id.close_btn:
                 finish();
                 break;
             case R.id.ForgetPass:
+                Intent intent=new Intent(this,ForgetPassword.class);
+                startActivity(intent);
                 break;
             case R.id.RegisterLogin:
                 //GOING TO REGISTERActivity
