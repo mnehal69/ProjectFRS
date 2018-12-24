@@ -1,6 +1,7 @@
 package app.mjordan.projectfrs;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -10,8 +11,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public class BottomNavBar extends Fragment implements View.OnClickListener {
+    OnBottomNavListerner mListener;
     LinearLayout tab1,tab2,tab3;
     public BottomNavBar(){}
+
+
+    interface OnBottomNavListerner{
+        public void fragment(int n );
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mListener = (OnBottomNavListerner) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement OnBottomNavListerner");
+        }
+    }
 
     @Nullable
     @Override
@@ -25,6 +42,7 @@ public class BottomNavBar extends Fragment implements View.OnClickListener {
         tab3.setOnClickListener(this);
         return view;
     }
+
     public void Tab_Icon(LinearLayout tab,int i){
         ImageView imageView;
         imageView = (ImageView) tab.getChildAt(0);
@@ -38,12 +56,15 @@ public class BottomNavBar extends Fragment implements View.OnClickListener {
         switch (view.getId()){
             case R.id.Tab_1:
                 Tab_Icon(tab1,R.drawable.money);
+                mListener.fragment(1);
                 break;
             case R.id.Tab_2:
                 Tab_Icon(tab2,R.drawable.pizza);
+                mListener.fragment(2);
                 break;
             case R.id.Tab_3:
                 Tab_Icon(tab3,R.drawable.face);
+                mListener.fragment(3);
                 break;
         }
     }

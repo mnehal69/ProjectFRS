@@ -37,4 +37,6 @@
     <string name="logout">LogOut</string>
     <string name="order">Order</string>
     <string name="eat">Eat</string>
+    <string name="online_order">No Online Order</string>
+    <string name="login_now">Login Now</string>
 </resources>

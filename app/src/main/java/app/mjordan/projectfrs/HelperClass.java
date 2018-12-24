@@ -58,7 +58,6 @@ public class HelperClass {
         }
         return connected;
     }
-
     public void load_Fragment(boolean load, android.support.v4.app.FragmentManager fm){
         if(load){
             if (prev == null) {

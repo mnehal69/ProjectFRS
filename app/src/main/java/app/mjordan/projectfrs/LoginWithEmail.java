@@ -64,8 +64,7 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
         RegisterBtn.setOnClickListener(this);
         LoginBtn.setOnClickListener(this);
         ForgetBtn.setOnClickListener(this);
-        prev = getFragmentManager().findFragmentByTag("loading_dialog");
-        loadingDialog = new LoadingDialog();
+
 
          helperClass=new HelperClass(this);
 
