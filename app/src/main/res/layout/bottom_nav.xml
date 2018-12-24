@@ -4,15 +4,19 @@
     android:layout_height="wrap_content"
     android:background="@color/Background">
     <LinearLayout
+        android:id="@+id/Tab_1"
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="10sp">
+        android:padding="5sp"
+        android:background="@drawable/tab"
+        android:focusable="true">
         <ImageView
             android:src="@drawable/money_silver"
-            android:layout_width="40sp"
-            android:layout_height="40sp"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
             android:contentDescription="@string/order" />
     </LinearLayout>
     <LinearLayout
@@ -20,24 +24,34 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="10sp">
+        android:padding="5sp"
+        android:clickable="true"
+        android:id="@+id/Tab_2"
+        android:background="@drawable/tab"
+        android:focusable="true">
         <ImageView
             android:src="@drawable/pizza_silver"
-            android:layout_width="40sp"
-            android:layout_height="40sp"
-            android:contentDescription="@string/eat" />
+            android:layout_width="25sp"
+            android:layout_height="25sp"
+            android:contentDescription="@string/eat"
+            />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="10sp">
+        android:padding="5sp"
+        android:clickable="true"
+        android:id="@+id/Tab_3"
+        android:background="@drawable/tab"
+        android:focusable="true">
         <ImageView
             android:background="@color/Transparent"
-            android:src="@drawable/face"
-            android:layout_width="50sp"
-            android:layout_height="50sp"
-            android:contentDescription="@string/profile" />
+            android:src="@drawable/face_silver"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:contentDescription="@string/profile"
+            android:focusable="true" />
     </LinearLayout>
     </LinearLayout>
