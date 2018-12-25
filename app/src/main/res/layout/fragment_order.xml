@@ -16,7 +16,7 @@
         <ImageView
             android:layout_width="200sp"
             android:layout_height="wrap_content"
-            android:src="@drawable/empty_dish"
+            android:src="@drawable/empty"
             android:contentDescription="@string/online_order" />
         <TextView
             android:textColor="@color/PrimaryText"

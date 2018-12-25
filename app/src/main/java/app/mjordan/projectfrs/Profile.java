@@ -40,8 +40,8 @@ public class Profile extends Fragment implements View.OnClickListener {
         dbHelper = new MKB_DB(getContext());
         SignIn= (Button) view.findViewById(R.id.SignIn);
         SignIn.setOnClickListener(this);
-        SignOut= (Button) view.findViewById(R.id.SignOut);
-        SignOut.setOnClickListener(this);
+        //SignOut= (Button) view.findViewById(R.id.SignOut);
+        //SignOut.setOnClickListener(this);
     }
 
     @Override
@@ -52,12 +52,13 @@ public class Profile extends Fragment implements View.OnClickListener {
                 main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(main);
                 break;
+                /*
             case R.id.SignOut:
                 dbHelper.DeleteAll_IsLogged();
                 Intent login=new Intent(getContext(),Login.class);
                 login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(login);
-                break;
+                break;*/
         }
     }
 //

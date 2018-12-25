@@ -10,7 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,BottomNavBar.OnBottomNavListerner {
+public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBottomNavListerner {
     MKB_DB dbHelper;
     ActionBar toolbar;
     FragmentTransaction ft;
@@ -20,13 +20,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         dbHelper = new MKB_DB(this);
         toolbar=getSupportActionBar();
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch(view.getId()){
-
-        }
+        FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.TabFragment,new LoadingMain());
+        ft.commit();
     }
 
     @Override
