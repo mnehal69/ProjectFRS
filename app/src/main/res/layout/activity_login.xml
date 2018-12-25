@@ -69,6 +69,7 @@
             android:gravity="center"
             android:layout_marginTop="15sp">
             <Button
+                android:id="@+id/Guest"
                 android:background="@drawable/dashed_line"
                 android:textSize="12sp"
                 android:textColor="#fff"

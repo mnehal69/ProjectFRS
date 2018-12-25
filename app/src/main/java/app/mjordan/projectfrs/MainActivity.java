@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,BottomNavBar.OnBottomNavListerner {
-    Button SignOut;
     MKB_DB dbHelper;
     ActionBar toolbar;
     FragmentTransaction ft;
@@ -19,8 +18,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SignOut= (Button) findViewById(R.id.SignOut);
-        SignOut.setOnClickListener(this);
         dbHelper = new MKB_DB(this);
         toolbar=getSupportActionBar();
     }
@@ -28,12 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         switch(view.getId()){
-            case R.id.SignOut:
-                dbHelper.DeleteAll_IsLogged();
-                Intent login=new Intent(this,Login.class);
-                login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(login);
-                break;
+
         }
     }
 

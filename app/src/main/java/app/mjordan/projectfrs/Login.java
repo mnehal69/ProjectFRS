@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
-    Button FacebookLogin,EmailSignUp;
+    Button FacebookLogin,EmailSignUp,GuessBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +25,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         //INTIALIZING THE BUTTON
         FacebookLogin= (Button) findViewById(R.id.facebook);
         EmailSignUp= (Button) findViewById(R.id.email);
+        GuessBtn=(Button) findViewById(R.id.Guest);
         EmailSignUp.setOnClickListener(this);
+        GuessBtn.setOnClickListener(this);
     }
     @Override
     public void onClick(View view) {
@@ -37,6 +39,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             break;
             case R.id.facebook:
                 break;
+            case R.id.Guest:
+                Intent main = new Intent(Login.this, MainActivity.class);
+                main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(main);
+                break;
+
         }
     }
 }

@@ -39,4 +39,9 @@
     <string name="eat">Eat</string>
     <string name="online_order">No Online Order</string>
     <string name="login_now">Login Now</string>
+    <string name="dummy_name">Dummy Name</string>
+    <string name="dummy_name_com">dummy@name.com</string>
+    <string name="email">Email</string>
+    <string name="d_no_8_d_street_dummy_opposite_dummy_lahore">D No 8-D Street Dummy Opposite Dummy,Lahore</string>
+    <string name="address">Address</string>
 </resources>

@@ -7,22 +7,7 @@
     tools:context=".MainActivity"
     android:background="@color/Background">
     <LinearLayout
-        android:visibility="gone"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
-    <Button
-        android:background="@drawable/login_button"
-        android:textColor="#fff"
-        android:textSize="12sp"
-        android:text="@string/logout"
-        android:id="@+id/SignOut"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    </LinearLayout>
-    <LinearLayout
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/LoadingView"
         android:layout_centerInParent="true"
         android:gravity="center"

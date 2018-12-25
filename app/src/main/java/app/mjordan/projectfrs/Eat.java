@@ -3,10 +3,12 @@ package app.mjordan.projectfrs;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 
 ///**
@@ -16,7 +18,6 @@ import android.view.ViewGroup;
 // * to handle interaction events.
 // */
 public class Eat extends Fragment {
-
     //private OnFragmentInteractionListener mListener;
 
     public Eat() {
@@ -31,7 +32,8 @@ public class Eat extends Fragment {
         return inflater.inflate(R.layout.fragment_eat, container, false);
     }
 
-//    // TODO: Rename method, update argument and hook method into UI event
+
+    //    // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
 //        if (mListener != null) {
 //            mListener.onFragmentInteraction(uri);
