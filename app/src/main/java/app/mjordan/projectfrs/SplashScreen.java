@@ -36,10 +36,11 @@ public class SplashScreen extends AppCompatActivity {
         helperClass=new HelperClass(this);
         Log.d("sadder", String.valueOf(dbHelper.getCount()));
         if(dbHelper.getCount()==0) {
-            Intent next = new Intent(this, MainActivity.class); //This is used to move to next activity
+            Intent next = new Intent(this, Login.class); //This is used to move to next activity
             startActivity(next);
             finish();
         }else{
+
             Log.d("sadder USERID",dbHelper.get_UserLoggedID());
             fetch(dbHelper.get_UserLoggedID());
         }
@@ -65,6 +66,7 @@ public class SplashScreen extends AppCompatActivity {
                                 if(isLogged) {
                                     JSONObject User = jObject.getJSONObject("User");
                                     Intent main = new Intent(SplashScreen.this, MainActivity.class);
+                                    main.putExtra("Type","User");
                                     startActivity(main);
                                 }else{
                                     Intent intent=new Intent(SplashScreen.this,Login.class);
@@ -78,7 +80,9 @@ public class SplashScreen extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
-                    Log.d("sadder error:", "That didn't work!");
+                    Log.d("sadder error:", error.getMessage().toString());
+                    Intent intent=new Intent(SplashScreen.this,Login.class);
+                    startActivity(intent);
 
                 }
             }) {

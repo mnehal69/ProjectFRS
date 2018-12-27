@@ -126,6 +126,7 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
                                          JSONObject User = jObject.getJSONObject("User");
                                          dbHelper.Insert_IsLogged(User.getString("ID"));
                                          Intent main = new Intent(LoginWithEmail.this, MainActivity.class);
+                                         main.putExtra("Type","User");
                                          main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                          startActivity(main);
                                      }
@@ -176,7 +177,6 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()) {
             case R.id.LoginBtn:
                boolean checked=!(helperClass.CheckEmpty(username) || helperClass.CheckEmpty(password));
-
                if (checked) {
                     ClearFocus(username);
                     ClearFocus(password);

@@ -48,7 +48,7 @@
         android:focusable="true">
         <ImageView
             android:background="@color/Transparent"
-            android:src="@drawable/face_silver"
+            android:src="@drawable/face"
             android:layout_width="40sp"
             android:layout_height="40sp"
             android:contentDescription="@string/profile"

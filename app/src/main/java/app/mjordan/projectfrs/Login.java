@@ -41,6 +41,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 break;
             case R.id.Guest:
                 Intent main = new Intent(Login.this, MainActivity.class);
+                main.putExtra("Type","Guest");
                 main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(main);
                 break;

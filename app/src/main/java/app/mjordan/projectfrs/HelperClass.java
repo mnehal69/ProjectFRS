@@ -3,6 +3,7 @@ package app.mjordan.projectfrs;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -35,10 +36,20 @@ public class HelperClass {
         }
         editText.getBackground().setColorFilter(ContextCompat.getColor(mContext, id), PorterDuff.Mode.SRC_ATOP);
     }
+    boolean isDeviceSupportCamera() {
+        if (mContext.getPackageManager().hasSystemFeature(
+                PackageManager.FEATURE_CAMERA)) {
+            // this device has a camera
+            return true;
+        } else {
+            // no camera on this device
+            return false;
+        }
+    }
 
     boolean CheckEmpty(EditText editText){
         String editval=editText.getText().toString().trim();
-        TextInputLayout layout= (TextInputLayout) editText.getParent();
+        TextInputLayout layout= (TextInputLayout) editText.getParentForAccessibility();
         String specific_field=layout.getHint().toString();
         //Log.d("zxc hint", String.valueOf(layout.getHint()));
         if(editval.equals("")){

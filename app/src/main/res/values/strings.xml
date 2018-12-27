@@ -1,5 +1,5 @@
 <resources>
-    <string name="website">http://192.168.10.3:8081/FRS/</string>
+    <string name="website">http://192.168.10.4:8081/FRS/</string>
     <string name="app_name">Mukbang</string>
     <string name="facebook_login_text">Login With Facebook</string>
     <string name="continue_with_email">Continue With Email</string>
@@ -45,4 +45,11 @@
     <string name="need_something_to_eat_login_now_to_order">Need something to eat Login now to Order</string>
     <string name="need_something_to_eat">Need something to eat</string>
     <string name="login_now_to_order">Login Now to Order</string>
+    <string name="full_name">Full Name</string>
+    <string name="login_logo">Login Logo</string>
+    <string name="night_mode">Night mode</string>
+    <string name="send_feeback">Send Feeback</string>
+    <string name="icon">Icon</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
 </resources>

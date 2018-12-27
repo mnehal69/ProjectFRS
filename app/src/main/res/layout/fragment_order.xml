@@ -14,13 +14,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <ImageView
-            android:layout_width="200sp"
-            android:layout_height="wrap_content"
+            android:layout_width="150sp"
+            android:layout_height="150sp"
             android:src="@drawable/empty_1"
             android:contentDescription="@string/online_order" />
         <TextView
+            android:fontFamily="serif-monospace"
             android:textColor="@color/PrimaryText"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:text="@string/online_order"
             android:layout_width="wrap_content"
