@@ -114,6 +114,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                     JSONObject User = jObject.getJSONObject("User");
                                     dbHelper.Insert_IsLogged(User.getString("ID"));
                                     Intent main = new Intent(RegisterActivity.this, MainActivity.class);
+                                    main.putExtra("UserData",User.toString());
                                     startActivity(main);
                                 }else{
                                     Log.d("zxc","NOT REGISTER");

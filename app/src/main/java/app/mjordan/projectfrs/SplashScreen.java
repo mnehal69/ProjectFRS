@@ -1,6 +1,7 @@
 package app.mjordan.projectfrs;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 
@@ -35,15 +36,15 @@ public class SplashScreen extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //Use to wake screen on this app
         helperClass=new HelperClass(this);
         Log.d("sadder", String.valueOf(dbHelper.getCount()));
-        if(dbHelper.getCount()==0) {
-            Intent next = new Intent(this, Login.class); //This is used to move to next activity
-            startActivity(next);
-            finish();
-        }else{
 
-            Log.d("sadder USERID",dbHelper.get_UserLoggedID());
-            fetch(dbHelper.get_UserLoggedID());
-        }
+            if (dbHelper.getCount() == 0) {
+                Intent next = new Intent(this, Login.class); //This is used to move to next activity
+                startActivity(next);
+                finish();
+            } else {
+                Log.d("sadder USERID", dbHelper.get_UserLoggedID());
+                fetch(dbHelper.get_UserLoggedID());
+            }
     }
 
 
@@ -66,10 +67,13 @@ public class SplashScreen extends AppCompatActivity {
                                 if(isLogged) {
                                     JSONObject User = jObject.getJSONObject("User");
                                     Intent main = new Intent(SplashScreen.this, MainActivity.class);
+                                    main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     main.putExtra("Type","User");
+                                    main.putExtra("UserData",User.toString());
                                     startActivity(main);
                                 }else{
                                     Intent intent=new Intent(SplashScreen.this,Login.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
                                 }
                             } catch (JSONException e) {
@@ -80,7 +84,9 @@ public class SplashScreen extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
-                    Log.d("sadder error:", error.getMessage().toString());
+                    if(error!=null) {
+                        Log.d("sadder error:", error.getMessage().toString());
+                    }
                     Intent intent=new Intent(SplashScreen.this,Login.class);
                     startActivity(intent);
 

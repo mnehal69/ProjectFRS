@@ -2,18 +2,27 @@ package app.mjordan.projectfrs;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
+
+import java.io.ByteArrayOutputStream;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -26,7 +35,7 @@ import static android.app.Activity.RESULT_OK;
  */
 public class ImageChoice extends DialogFragment implements View.OnClickListener {
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final int OPEN_DOCUMENT_CODE = 2;
+    private static final int OPEN_GALLERY_CODE = 2;
     private OnImageChoiceListerner ICListener;
     Button camerabtn,gallerybtn;
     public ImageChoice() {
@@ -61,10 +70,11 @@ public class ImageChoice extends DialogFragment implements View.OnClickListener 
                 }
                 break;
             case R.id.gallery:
-                intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("image/*");
-                startActivityForResult(intent, OPEN_DOCUMENT_CODE);
+                //intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                //intent.addCategory(Intent.CATEGORY_OPENABLE);
+                //intent.setType("image/*");
+                intent=new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, OPEN_GALLERY_CODE);
                 break;
         }
     }
@@ -100,7 +110,7 @@ public class ImageChoice extends DialogFragment implements View.OnClickListener 
     */
     public interface OnImageChoiceListerner{
         // TODO: Update argument type and name
-        void image_select(Uri uri_img);
+        void image_select(Uri uri);
     }
 
 
@@ -108,11 +118,17 @@ public class ImageChoice extends DialogFragment implements View.OnClickListener 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Uri imageUri= data.getData();
+            Bitmap bitmap= data.getParcelableExtra("data");
+            Log.d("zxc","WORK BITCH");
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "Title", null);
+            Uri imageUri=Uri.parse(path);
             // Do other work with full size photo saved in mLocationForPhotos
             ICListener.image_select(imageUri);
+
         }
-        if (requestCode == OPEN_DOCUMENT_CODE && resultCode == RESULT_OK) {
+        if (requestCode == OPEN_GALLERY_CODE && resultCode == RESULT_OK) {
             if (data != null) {
                 // this is the image selected by the user
                 Uri imageUri = data.getData();

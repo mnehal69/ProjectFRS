@@ -7,6 +7,7 @@
     tools:context=".ImageChoice"
     android:orientation="vertical"
     android:background="@color/Background">
+
         <Button
             android:id="@+id/Camera"
             android:textColor="#fff"

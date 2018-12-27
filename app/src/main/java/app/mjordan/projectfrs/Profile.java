@@ -3,14 +3,18 @@ package app.mjordan.projectfrs;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +23,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -27,15 +33,24 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Callback;
 
 
 /**
@@ -45,16 +60,22 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * to handle interaction events.
  */
 public class Profile extends Fragment implements View.OnClickListener {
-    Button SignIn,SignOut;
+    Button SignIn;
     //private OnFragmentInteractionListener mListener;
     MKB_DB dbHelper;
-    LinearLayout onLogin,offLogin;
+    LinearLayout offLogin;
+    RelativeLayout onLogin;
     String type="Guest";
     CircleImageView userPic;
     HelperClass helperClass;
     String server_url;
+    String mediaPath,json;
+    User userData;
+    ListView listView;
+    ArrayList<ProfileList> profileListArrayList;
     public Profile() {
         // Required empty public constructor
+
     }
 
 
@@ -69,18 +90,34 @@ public class Profile extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         dbHelper = new MKB_DB(getContext());
-
+        helperClass=new HelperClass(getContext());
         SignIn= (Button) view.findViewById(R.id.SignIn);
-        onLogin=(LinearLayout)view.findViewById(R.id.OnLogin);
+        onLogin=(RelativeLayout) view.findViewById(R.id.OnLogin);
         offLogin=(LinearLayout)view.findViewById(R.id.NotLogin);
         userPic=(CircleImageView) view.findViewById(R.id.profile_image);
-        SignOut= (Button) view.findViewById(R.id.SignOut);
+        listView=(ListView)view.findViewById(R.id.list);
         helperClass=new HelperClass(getContext());
         server_url=getResources().getString(R.string.website)+"user/upload_image.php";
 
         Bundle bundle=getArguments();
         if(bundle!=null){
             type=bundle.getString("Type");
+            json=bundle.getString("json");
+            if(json!=null){
+                profileListArrayList=new ArrayList<>();
+                Gson gson = new Gson();
+                userData = gson.fromJson(json, User.class);
+                profileListArrayList.add(new ProfileList("Full Name",userData.Name));
+                profileListArrayList.add(new ProfileList("Email",userData.Email));
+                profileListArrayList.add(new ProfileList("Contact No",userData.Contact));
+                profileListArrayList.add(new ProfileList("Address","House No 8-B  Street No 52 Sant Nagar Nehru Park Lahore"));
+
+                CustomProfileAdapter customProfileAdapter=new CustomProfileAdapter(profileListArrayList,getContext());
+                if(userData.Avatar!=null) {
+                    Picasso.with(getContext()).load(getResources().getString(R.string.website)+userData.Avatar).into(userPic);
+                }
+                listView.setAdapter(customProfileAdapter);
+            }
         }
 
         if(type.equals("User")){
@@ -92,7 +129,6 @@ public class Profile extends Fragment implements View.OnClickListener {
         }
 
         SignIn.setOnClickListener(this);
-        SignOut.setOnClickListener(this);
         userPic.setOnClickListener(this);
     }
 
@@ -114,75 +150,131 @@ public class Profile extends Fragment implements View.OnClickListener {
                 main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(main);
                 break;
-            case R.id.SignOut:
-                dbHelper.DeleteAll_IsLogged();
-                Intent login=new Intent(getContext(),Login.class);
-                login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(login);
-                break;
         }
     }
 
-    void setImage( Uri uri_img){
-        if(uri_img!=null){
-            userPic.setImageURI(uri_img);
+    void setImage( Uri uri){
+        if(uri!=null) {
+            String[] filePathColumn={MediaStore.Images.Media.DATA};
+            Cursor cursor= (getActivity()).getContentResolver().query(uri,filePathColumn,null,null,null);
+            assert cursor!=null;
+            cursor.moveToFirst();
+            int columnIndex=cursor.getColumnIndex(filePathColumn[0]);
+            mediaPath=cursor.getString(columnIndex);
+            Log.d("zxc",mediaPath);
+            Picasso.with(getContext()).load(uri.toString()).into(userPic);
+            cursor.close();
         }
-        BitmapDrawable drawable = (BitmapDrawable) userPic.getDrawable();
-        Bitmap bitmap = drawable.getBitmap();
-        //uploadImage(bitmap);
+        uploadFile();
     }
 
-    public void uploadImage(final Bitmap bitmap) {
-        Log.d("sadder","YES IT'S WORKING");
-        /*
-         *
-         * VOLLEY PASS THE PARAMETER (WHICH ARE IN GET_PARAMS) TO SERVER_URL
-         * USTING GET OR POST METHOD AND THEN RECEIVE THE RESPONSE OF THE WEBSITE
-         * */
+    @Override
+    public void onResume() {
+        super.onResume();
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        if (activity != null) {
+            activity.getSupportActionBar().show();
+        }
+    }
+
+    // Uploading Image/Video
+    private void uploadFile() {
         final FragmentManager fm = getActivity().getSupportFragmentManager();
         helperClass.load_Fragment(true,fm);
-        if (helperClass.Check_Internet()) {
-            // Instantiate the RequestQueue.
-            RequestQueue queue = Volley.newRequestQueue(getContext());
-            // Request a string response from the provided URL.
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            // Display the first 500 characters of the response string.
-                            Log.d("sadder msg:", response);
-                            helperClass.load_Fragment(false,fm);
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
-                    Log.d("sadder error:", "That didn't work!");
-                    helperClass.load_Fragment(false,fm);
-                }
-            }) {
 
-                @Override
-                protected Map<String, String> getParams(){
-                    Map<String, String> params = new HashMap<>();
-                    String images=getStringImage(bitmap);
-                    params.put("Avatar", images);
-                    return params;
+        // Map is used to multipart the file using okhttp3.RequestBody
+        File file = new File(mediaPath);
+
+        // Parsing any Media type file
+        RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
+        MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", userData.ID+".png", requestBody);
+
+        ApiConfig getResponse = AppConfig.getRetrofit().create(ApiConfig.class);
+        Call<ServerResponse> call = getResponse.uploadFile(fileToUpload);
+        call.enqueue(new Callback<ServerResponse>() {
+            @Override
+            public void onResponse(retrofit2.Call call, retrofit2.Response response) {
+                ServerResponse serverResponse = (ServerResponse) response.body();
+                if (serverResponse != null) {
+                    if (serverResponse.getSuccess()) {
+                        Toast.makeText(getContext(), serverResponse.getMessage(),Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), serverResponse.getMessage(),Toast.LENGTH_SHORT).show();
+                        userPic.setImageDrawable(getResources().getDrawable(R.drawable.bartender));
+                    }
+                } else {
+                    assert serverResponse != null;
+                    Log.d("zxc", serverResponse.toString());
                 }
-            };
-            // Add the request to the RequestQueue.
-            queue.add(stringRequest);
-        }
+                helperClass.load_Fragment(false,fm);
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call call, Throwable t) {
+                Log.d("zxc error",t.getMessage().toString());
+                helperClass.load_Fragment(false,fm);
+            }
+        });
     }
 
-    public String getStringImage(Bitmap bitmap)
-    {
-        ByteArrayOutputStream baos=new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] b= baos.toByteArray();
-        String temp= Base64.encodeToString(b, Base64.DEFAULT);
-        return  temp;
-    }
+
+
+
+
+
+
+
+//    public void uploadImage(final Bitmap bitmap) {
+//        Log.d("sadder","YES IT'S WORKING");
+//        /*
+//         *
+//         * VOLLEY PASS THE PARAMETER (WHICH ARE IN GET_PARAMS) TO SERVER_URL
+//         * USTING GET OR POST METHOD AND THEN RECEIVE THE RESPONSE OF THE WEBSITE
+//         * */
+//        final FragmentManager fm = getActivity().getSupportFragmentManager();
+//        helperClass.load_Fragment(true,fm);
+//        if (helperClass.Check_Internet()) {
+//            // Instantiate the RequestQueue.
+//            RequestQueue queue = Volley.newRequestQueue(getContext());
+//            // Request a string response from the provided URL.
+//            StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url,
+//                    new Response.Listener<String>() {
+//                        @Override
+//                        public void onResponse(String response) {
+//                            // Display the first 500 characters of the response string.
+//                            Log.d("sadder msg:", response);
+//                            helperClass.load_Fragment(false,fm);
+//                        }
+//                    }, new Response.ErrorListener() {
+//                @Override
+//                public void onErrorResponse(VolleyError error) {
+//                    Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
+//                    Log.d("sadder error:", "That didn't work!");
+//                    helperClass.load_Fragment(false,fm);
+//                }
+//            }) {
+//
+//                @Override
+//                protected Map<String, String> getParams(){
+//                    Map<String, String> params = new HashMap<>();
+//                    String images=getStringImage(bitmap);
+//                    params.put("Avatar", images);
+//                    return params;
+//                }
+//            };
+//            // Add the request to the RequestQueue.
+//            queue.add(stringRequest);
+//        }
+//    }
+//
+//    public String getStringImage(Bitmap bitmap)
+//    {
+//        ByteArrayOutputStream baos=new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+//        byte[] b= baos.toByteArray();
+//        String temp= Base64.encodeToString(b, Base64.DEFAULT);
+//        return  temp;
+//    }
 
 
 

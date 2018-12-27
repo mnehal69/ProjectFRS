@@ -46,17 +46,19 @@
             android:layout_width="250sp"
             android:layout_height="wrap_content" />
     </LinearLayout>
-
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/OnLogin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/SettingImage"
+            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginBottom="20sp">
             <de.hdodenhof.circleimageview.CircleImageView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/profile_image"
@@ -68,37 +70,20 @@
                 app:civ_border_color="#FFF"
                 android:focusable="true" />
         </LinearLayout>
-<!--Detail row -->
-        <LinearLayout
-            android:paddingBottom="20sp"
-            android:paddingStart="20sp"
-            android:paddingEnd="0sp"
-            android:layout_marginTop="40sp"
+        <!--Detail row -->
+        <ListView
+            android:layout_below="@+id/SettingImage"
+            android:id="@+id/list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:textColor="@color/ErrorDialog"
-                android:text="@string/full_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:layout_marginTop="10sp"
-                android:textSize="15sp"
-                android:textColor="@color/PrimaryText"
-                android:text="@string/dummy_name"
-                android:backgroundTint="@color/Card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+            android:layout_height="wrap_content" />
+
 <!--SWITCH TOGGLE-->
         <LinearLayout
+            android:layout_marginBottom="40sp"
+            android:layout_alignParentBottom="true"
             android:paddingBottom="20sp"
             android:paddingStart="20sp"
             android:paddingEnd="0sp"
-            android:layout_marginTop="40sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -116,55 +101,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
-<!--Clickable view-->
-        <LinearLayout
-            android:focusable="true"
-            android:clickable="true"
-            android:background="@drawable/linear_list"
-            android:paddingTop="20sp"
-            android:paddingBottom="20sp"
-            android:paddingStart="20sp"
-            android:paddingEnd="0sp"
-            android:layout_marginTop="40sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center">
-            <ImageView
-                android:src="@drawable/ic_email_black_24dp"
-                android:layout_width="30sp"
-                android:layout_height="30sp"
-                android:contentDescription="@string/icon" />
-            </LinearLayout>
-                <TextView
-                android:layout_marginTop="0sp"
-                android:layout_weight="1"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/PrimaryText"
-                android:text="@string/send_feeback"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/SignOut"
-            android:textStyle="bold"
-            android:textColor="@color/PrimaryText"
-            android:text="@string/logout"
-            android:layout_marginTop="20sp"
-            android:background="@drawable/button"
-            android:backgroundTint="@color/Card"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-
-    </LinearLayout>
-
+    </RelativeLayout>
 
 </LinearLayout>
