@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Login"
-    android:background="@drawable/back_pic"
+    android:background="@mipmap/back_pic"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     >

@@ -79,7 +79,7 @@
 
 <!--SWITCH TOGGLE-->
         <LinearLayout
-            android:layout_marginBottom="40sp"
+            android:layout_marginBottom="30sp"
             android:layout_alignParentBottom="true"
             android:paddingBottom="20sp"
             android:paddingStart="20sp"

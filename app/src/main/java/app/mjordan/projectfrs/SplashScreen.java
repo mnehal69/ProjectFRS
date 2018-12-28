@@ -84,9 +84,6 @@ public class SplashScreen extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
-                    if(error!=null) {
-                        Log.d("sadder error:", error.getMessage().toString());
-                    }
                     Intent intent=new Intent(SplashScreen.this,Login.class);
                     startActivity(intent);
 

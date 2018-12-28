@@ -10,7 +10,7 @@
 
     <item
         android:id="@+id/Retaurent"
-        android:icon="@drawable/drink"
+        android:icon="@drawable/pizza"
         app:showAsAction="always"
         android:title="@string/eating" />
 

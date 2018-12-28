@@ -4,8 +4,6 @@
     <item  android:id="@+id/Setting"
         android:title="@string/more_setting" />
     <item  android:id="@+id/edit"
-        android:icon="@drawable/edit"
-        app:showAsAction="ifRoom"
         android:title="@string/edit" />
     <item  android:id="@+id/LogOut"
         android:title="@string/logout" />
