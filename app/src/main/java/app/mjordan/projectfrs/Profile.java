@@ -18,6 +18,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -70,14 +72,24 @@ public class Profile extends Fragment implements View.OnClickListener {
     HelperClass helperClass;
     String server_url;
     String mediaPath,json;
-    User userData;
+    User userData,editData;
     ListView listView;
     ArrayList<ProfileList> profileListArrayList;
+    int ListType=0;
     public Profile() {
         // Required empty public constructor
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,6 +97,8 @@ public class Profile extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
+
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -98,19 +112,26 @@ public class Profile extends Fragment implements View.OnClickListener {
         listView=(ListView)view.findViewById(R.id.list);
         helperClass=new HelperClass(getContext());
         server_url=getResources().getString(R.string.website)+"user/upload_image.php";
-
         Bundle bundle=getArguments();
         if(bundle!=null){
             type=bundle.getString("Type");
             json=bundle.getString("json");
+            String listType=bundle.getString("ListType");
+            if(listType.equals("Edit")){
+                ListType=2;
+            }else{
+                ListType=1;
+            }
+            Log.d("zxc", String.valueOf(ListType));
             if(json!=null){
                 profileListArrayList=new ArrayList<>();
                 Gson gson = new Gson();
                 userData = gson.fromJson(json, User.class);
-                profileListArrayList.add(new ProfileList("Full Name",userData.Name));
-                profileListArrayList.add(new ProfileList("Email",userData.Email));
-                profileListArrayList.add(new ProfileList("Contact No",userData.Contact));
-                profileListArrayList.add(new ProfileList("Address","House No 8-B  Street No 52 Sant Nagar Nehru Park Lahore"));
+                editData = gson.fromJson(json, User.class);
+                profileListArrayList.add(new ProfileList("Name",userData.Name,ListType));
+                profileListArrayList.add(new ProfileList("Email",userData.Email,0));
+                profileListArrayList.add(new ProfileList("Contact",userData.Contact,ListType));
+                profileListArrayList.add(new ProfileList("Address",userData.Address,ListType));
 
                 CustomProfileAdapter customProfileAdapter=new CustomProfileAdapter(profileListArrayList,getContext());
                 if(userData.Avatar!=null) {

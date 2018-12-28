@@ -3,9 +3,16 @@ package app.mjordan.projectfrs;
 public class ProfileList {
     private String title;
     private String value;
-    public ProfileList(String title,String value){
+    private int type;
+
+    ProfileList(String title, String value,int type){
         this.title=title;
-        this.value=value;
+        if(value==null) {
+            this.value = "Add a "+this.title.toLowerCase();
+        }else{
+            this.value = value;
+        }
+        this.type=type;
     }
     public String getValue() {
         return value;
@@ -21,5 +28,13 @@ public class ProfileList {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

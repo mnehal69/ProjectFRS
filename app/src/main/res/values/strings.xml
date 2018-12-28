@@ -1,5 +1,5 @@
 <resources>
-    <string name="website">http://192.168.10.3:8081/FRS/</string>
+    <string name="website">http://192.168.10.5:8081/FRS/</string>
     <string name="app_name">Mukbang</string>
     <string name="facebook_login_text">Login With Facebook</string>
     <string name="continue_with_email">Continue With Email</string>
@@ -55,4 +55,6 @@
     <string name="setting">Setting</string>
     <string name="edit">Edit</string>
     <string name="more_setting">More Setting</string>
+    <string name="add_full_name">Add Full Name</string>
+    <string name="done">Done</string>
 </resources>

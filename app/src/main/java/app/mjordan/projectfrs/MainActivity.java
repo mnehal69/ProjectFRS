@@ -21,8 +21,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
     MKB_DB dbHelper;
     ActionBar toolbar;
     FragmentTransaction ft;
-    String type,json;
+    String type,json,list;
     ActionBar actionBar;
+    Boolean show=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +35,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
         json = getIntent().getExtras().getString("UserData",null);
         Profile profile=new Profile();
         Bundle bundle=new Bundle();
+        list="List";
         bundle.putString("Type",type);
         bundle.putString("json",json);
+        bundle.putString("ListType",list);
         profile.setArguments(bundle);
         ft.add(R.id.TabFragment,profile);
         ft.commit();
@@ -49,11 +52,27 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.login_menu,menu);
+        MenuItem item1=menu.findItem(R.id.done);
+        MenuItem item2=menu.findItem(R.id.edit);
+        if(show!=null){
+            if(show){
+                item1.setVisible(show);
+                item2.setVisible(!show);
+            }else{
+                item1.setVisible(show);
+                item2.setVisible(!show);
+            }
+        }
         return true;
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
+        Profile profile;
+        Bundle bundle;
         switch (item.getItemId()){
             case R.id.LogOut:
                 dbHelper.DeleteAll_IsLogged();
@@ -62,10 +81,33 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
                 startActivity(login);
                 break;
             case R.id.edit:
-
+                list="Edit";
+                profile=new Profile();
+                bundle=new Bundle();
+               bundle.putString("Type",type);
+                bundle.putString("json",json);
+                bundle.putString("ListType",list);
+                profile.setArguments(bundle);
+                ft.replace(R.id.TabFragment,profile);
+                show=true;
+                invalidateOptionsMenu();
+                ft.commit();
+                break;
+            case R.id.done:
+                list="List";
+                profile=new Profile();
+                bundle=new Bundle();
+                bundle.putString("Type",type);
+                bundle.putString("json",json);
+                bundle.putString("ListType",list);
+                profile.setArguments(bundle);
+                ft.replace(R.id.TabFragment,profile);
+                show=false;
+                invalidateOptionsMenu();
+                ft.commit();
                 break;
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -84,10 +126,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
                 Log.d("zxc","CASE3");
                 Profile profile=new Profile();
                 Bundle bundle=new Bundle();
+                list="List";
                 bundle.putString("Type",type);
                 bundle.putString("json",json);
+                bundle.putString("ListType",list);
                 profile.setArguments(bundle);
                 ft.replace(R.id.TabFragment,profile);
+                show=false;
+                invalidateOptionsMenu();
                 break;
         }
         ft.commit();
