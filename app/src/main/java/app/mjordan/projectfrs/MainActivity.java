@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,12 +15,26 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
-public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBottomNavListerner,ImageChoice.OnImageChoiceListerner {
-    MKB_DB dbHelper;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
+public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBottomNavListerner,ImageChoice.OnImageChoiceListerner,Profile.OnFragmentInteractionListener {
+    MKB_DB dbHelper;
+    HelperClass helperClass;
     FragmentTransaction ft;
     String type,json,list;
     @Override
@@ -27,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dbHelper = new MKB_DB(this);
-
+        helperClass=new HelperClass(this);
         type=getIntent().getExtras().getString("Type","Guest");
         FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
         json = getIntent().getExtras().getString("UserData",null);
@@ -40,68 +55,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
         profile.setArguments(bundle);
         ft.add(R.id.TabFragment,profile);
         ft.commit();
-        //PersmissionUtils.checkAndRequestPermissions(MainActivity.this);
+        PersmissionUtils.checkAndRequestPermissions(MainActivity.this);
 
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater=getMenuInflater();
-//        inflater.inflate(R.menu.login_menu,menu);
-//        MenuItem item1=menu.findItem(R.id.done);
-//        MenuItem item2=menu.findItem(R.id.edit);
-//        if(show!=null){
-//            if(show){
-//                item1.setVisible(show);
-//                item2.setVisible(!show);
-//            }else{
-//                item1.setVisible(show);
-//                item2.setVisible(!show);
-//            }
-//        }
-//        return true;
-//    }
-//
-//
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
-//        Profile profile;
-//        Bundle bundle;
-//        switch (item.getItemId()){
-//            case R.id.LogOut:
-//
-//                break;
-//            case R.id.edit:
-//                list="Edit";
-//                profile=new Profile();
-//                bundle=new Bundle();
-//               bundle.putString("Type",type);
-//                bundle.putString("json",json);
-//                bundle.putString("ListType",list);
-//                profile.setArguments(bundle);
-//                ft.replace(R.id.TabFragment,profile);
-//                show=true;
-//                invalidateOptionsMenu();
-//                ft.commit();
-//                break;
-//            case R.id.done:
-//                list="List";
-//                profile=new Profile();
-//                bundle=new Bundle();
-//                bundle.putString("Type",type);
-//                bundle.putString("json",json);
-//                bundle.putString("ListType",list);
-//                profile.setArguments(bundle);
-//                ft.replace(R.id.TabFragment,profile);
-//                show=false;
-//                invalidateOptionsMenu();
-//                ft.commit();
-//                break;
-//        }
-//        return true;
-//    }
 
     @Override
     public void fragment(int n) {
@@ -127,8 +84,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
                 bundle.putString("ListType",list);
                 profile.setArguments(bundle);
                 ft.replace(R.id.TabFragment,profile);
-                show=false;
-                invalidateOptionsMenu();
                 break;
         }
         ft.commit();
@@ -139,6 +94,112 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
                 getSupportFragmentManager().findFragmentById(R.id.TabFragment);
         if(uri!=null){
             frag.setImage(uri);
+        }
+    }
+
+    public boolean sameUserValue(User user,User another){
+        if(!another.Name.equals(user.Name)){
+            return false;
+        }
+        if(!another.Address.equals(user.Address)){
+            return false;
+        }
+        if(!another.Contact.equals(user.Contact)){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void Done(User user, User userData) {
+
+        if(!sameUserValue(user,userData)) {
+            Gson gson = new Gson();
+            //String json = gson.toJson(userData);
+            update(userData);
+        }else{
+            FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
+            list="List";
+            Profile profile=new Profile();
+            Bundle bundle=new Bundle();
+            bundle.putString("Type",type);
+            bundle.putString("json",json);
+            bundle.putString("ListType",list);
+            profile.setArguments(bundle);
+            ft.replace(R.id.TabFragment,profile);
+            ft.commit();
+        }
+
+    }
+
+
+    public void update(final User user) {
+        /*
+         *
+         * VOLLEY PASS THE PARAMETER (WHICH ARE IN GET_PARAMS) TO SERVER_URL
+         * USTING GET OR POST METHOD AND THEN RECEIVE THE RESPONSE OF THE WEBSITE
+         * */
+
+        final FragmentManager fm = getSupportFragmentManager();
+        helperClass.load_Fragment(true,fm);
+        if (helperClass.Check_Internet()) {
+            // Instantiate the RequestQueue.
+            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+            // Request a string response from the provided URL.
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, getResources().getString(R.string.website)+"user/update_user.php",
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            // Display the first 500 characters of the response string.
+
+                            Log.d("sadder msg:", response);
+                            try {
+                                JSONObject jObject = new JSONObject(response);
+                                boolean update = jObject.getBoolean("IsUpdate");
+                                if (update) {
+                                    Gson gson=new Gson();
+                                        json=gson.toJson(user);
+                                    FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
+                                    list="List";
+                                    Profile profile=new Profile();
+                                    Bundle bundle=new Bundle();
+                                    bundle.putString("Type",type);
+                                    bundle.putString("json",json);
+                                    bundle.putString("ListType",list);
+                                    profile.setArguments(bundle);
+                                    ft.replace(R.id.TabFragment,profile);
+                                    ft.commit();
+                                    }else{
+                                    Toast.makeText(getApplicationContext(),jObject.getString("Error"), Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            helperClass.load_Fragment(false,fm);
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                    //Log.d("sadder error:", "That didn't work!");
+                    helperClass.load_Fragment(false,fm);
+                }
+            }) {
+
+                @Override
+                protected Map<String, String> getParams(){
+                    Map<String, String> params = new HashMap<>();
+                    params.put("Name", user.Name);
+                    params.put("ID", user.ID);
+                    params.put("Contact", user.Contact);
+                    params.put("Address", user.Address);
+                    return params;
+                }
+            };
+            // Add the request to the RequestQueue.
+            queue.add(stringRequest);
+        }else{
+            helperClass.load_Fragment(false,fm);
         }
     }
 

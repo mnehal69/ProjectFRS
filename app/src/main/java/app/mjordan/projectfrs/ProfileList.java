@@ -7,8 +7,8 @@ public class ProfileList {
 
     ProfileList(String title, String value,int type){
         this.title=title;
-        if(value==null) {
-            this.value = "Add a "+this.title.toLowerCase();
+        if(value.equals("null")) {
+            this.value = "No "+this.title.toLowerCase()+" Specified";
         }else{
             this.value = value;
         }

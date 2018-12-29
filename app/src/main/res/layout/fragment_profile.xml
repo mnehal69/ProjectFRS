@@ -7,59 +7,7 @@
     tools:context=".Profile"
     android:orientation="vertical"
     android:padding="20sp">
-    <LinearLayout
-        android:id="@+id/ActionBar"
-        android:layout_width="match_parent"
-        android:layout_height="60sp"
-        android:baselineAligned="false">
-        <LinearLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-        <TextView
-            android:layout_marginTop="10sp"
-            android:layout_marginBottom="10sp"
-            android:text="@string/setting"
-            android:textColor="@color/PrimaryText"
-            android:textSize="20sp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/tab"
-            >
-            <LinearLayout
-                android:id="@+id/done"
-                android:clickable="true"
-                android:background="@drawable/circle_tab"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                >
-                <ImageView
-                    android:src="@drawable/ic_done_black_24dp"
-                    android:layout_width="30sp"
-                    android:layout_height="30sp"
-                    android:contentDescription="@string/done" />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/profile_menu"
-                android:clickable="true"
-                android:background="@drawable/circle_tab"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="true">
-                <ImageView
-                    android:src="@drawable/ic_more_vert_24dp"
-                    android:layout_width="30sp"
-                    android:layout_height="30sp"
-                    android:contentDescription="@string/done" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
+
 
     <LinearLayout
         android:visibility="gone"
@@ -106,6 +54,64 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/ActionBar"
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:baselineAligned="false">
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginTop="10sp"
+                    android:layout_marginBottom="10sp"
+                    android:text="@string/setting"
+                    android:textColor="@color/PrimaryText"
+                    android:textSize="20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/tab"
+                >
+                <LinearLayout
+                    android:id="@+id/done"
+                    android:clickable="true"
+                    android:background="@drawable/circle_tab"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    >
+                    <ImageView
+                        android:src="@drawable/ic_done_black_24dp"
+                        android:layout_width="30sp"
+                        android:layout_height="30sp"
+                        android:contentDescription="@string/done" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/profile_menu"
+                    android:clickable="true"
+                    android:background="@drawable/circle_tab"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="true">
+                    <ImageView
+                        android:src="@drawable/ic_more_vert_24dp"
+                        android:layout_width="30sp"
+                        android:layout_height="30sp"
+                        android:contentDescription="@string/done" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_marginTop="40sp"
             android:id="@+id/SettingImage"
             android:layout_alignParentTop="true"
             android:layout_width="match_parent"
@@ -125,6 +131,7 @@
         </LinearLayout>
         <!--Detail row -->
         <ListView
+            android:divider="@color/PrimaryText"
             android:layout_below="@+id/SettingImage"
             android:id="@+id/list"
             android:layout_width="match_parent"

@@ -63,9 +63,9 @@ import retrofit2.Callback;
  */
 public class Profile extends Fragment implements View.OnClickListener {
     Button SignIn;
-    //private OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionListener mListener;
     MKB_DB dbHelper;
-    LinearLayout offLogin,Menu;
+    LinearLayout offLogin,Menu,Done;
     RelativeLayout onLogin;
     String type="Guest";
     CircleImageView userPic;
@@ -76,6 +76,7 @@ public class Profile extends Fragment implements View.OnClickListener {
     ListView listView;
     ArrayList<ProfileList> profileListArrayList;
     int ListType=0;
+    CustomProfileAdapter customProfileAdapter;
     Boolean show=false;
     public Profile() {
         // Required empty public constructor
@@ -110,6 +111,7 @@ public class Profile extends Fragment implements View.OnClickListener {
         onLogin=(RelativeLayout) view.findViewById(R.id.OnLogin);
         offLogin=(LinearLayout)view.findViewById(R.id.NotLogin);
         Menu=(LinearLayout)view.findViewById(R.id.profile_menu);
+        Done=(LinearLayout)view.findViewById(R.id.done);
         userPic=(CircleImageView) view.findViewById(R.id.profile_image);
         listView=(ListView)view.findViewById(R.id.list);
         helperClass=new HelperClass(getContext());
@@ -121,11 +123,14 @@ public class Profile extends Fragment implements View.OnClickListener {
             String listType=bundle.getString("ListType");
             if(listType.equals("Edit")){
                 ListType=2;
+                show=true;
             }else{
-                ListType=1;
+                ListType=0;
             }
-            Log.d("zxc", String.valueOf(ListType));
+            //Log.d("zxc", String.valueOf(ListType));
             if(json!=null){
+                FragmentTransaction ft= getActivity().getSupportFragmentManager().beginTransaction();
+                Menu.setOnClickListener(new OnMenuProfileOverflowListerner(getContext(),type,listType,json,ft));
                 profileListArrayList=new ArrayList<>();
                 Gson gson = new Gson();
                 userData = gson.fromJson(json, User.class);
@@ -135,9 +140,9 @@ public class Profile extends Fragment implements View.OnClickListener {
                 profileListArrayList.add(new ProfileList("Contact",userData.Contact,ListType));
                 profileListArrayList.add(new ProfileList("Address",userData.Address,ListType));
 
-                CustomProfileAdapter customProfileAdapter=new CustomProfileAdapter(profileListArrayList,getContext());
+                customProfileAdapter=new CustomProfileAdapter(profileListArrayList,getContext(),editData);
                 if(userData.Avatar!=null) {
-                    Picasso.with(getContext()).load(getResources().getString(R.string.website)+userData.Avatar).into(userPic);
+                    Picasso.get().load(getResources().getString(R.string.website)+userData.Avatar).into(userPic);
                 }
                 listView.setAdapter(customProfileAdapter);
             }
@@ -150,10 +155,14 @@ public class Profile extends Fragment implements View.OnClickListener {
             onLogin.setVisibility(View.GONE);
             offLogin.setVisibility(View.VISIBLE);
         }
-
+        if(show){
+            Done.setVisibility(View.VISIBLE);
+        }else{
+            Done.setVisibility(View.GONE);
+        }
+        Done.setOnClickListener(this);
         SignIn.setOnClickListener(this);
         userPic.setOnClickListener(this);
-        Menu.setOnClickListener(new OnMenuProfileOverflowListerner(getContext()));
     }
 
     @Override
@@ -174,6 +183,9 @@ public class Profile extends Fragment implements View.OnClickListener {
                 main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(main);
                 break;
+            case R.id.done:
+                mListener.Done(userData,customProfileAdapter.getEditData());
+                break;
         }
     }
 
@@ -186,7 +198,7 @@ public class Profile extends Fragment implements View.OnClickListener {
             int columnIndex=cursor.getColumnIndex(filePathColumn[0]);
             mediaPath=cursor.getString(columnIndex);
             Log.d("zxc",mediaPath);
-            Picasso.with(getContext()).load(uri.toString()).into(userPic);
+            Picasso.get().load(uri.toString()).into(userPic);
             cursor.close();
         }
         uploadFile();
@@ -234,104 +246,35 @@ public class Profile extends Fragment implements View.OnClickListener {
         });
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
 
-
-
-
-
-
-//    public void uploadImage(final Bitmap bitmap) {
-//        Log.d("sadder","YES IT'S WORKING");
-//        /*
-//         *
-//         * VOLLEY PASS THE PARAMETER (WHICH ARE IN GET_PARAMS) TO SERVER_URL
-//         * USTING GET OR POST METHOD AND THEN RECEIVE THE RESPONSE OF THE WEBSITE
-//         * */
-//        final FragmentManager fm = getActivity().getSupportFragmentManager();
-//        helperClass.load_Fragment(true,fm);
-//        if (helperClass.Check_Internet()) {
-//            // Instantiate the RequestQueue.
-//            RequestQueue queue = Volley.newRequestQueue(getContext());
-//            // Request a string response from the provided URL.
-//            StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url,
-//                    new Response.Listener<String>() {
-//                        @Override
-//                        public void onResponse(String response) {
-//                            // Display the first 500 characters of the response string.
-//                            Log.d("sadder msg:", response);
-//                            helperClass.load_Fragment(false,fm);
-//                        }
-//                    }, new Response.ErrorListener() {
-//                @Override
-//                public void onErrorResponse(VolleyError error) {
-//                    Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
-//                    Log.d("sadder error:", "That didn't work!");
-//                    helperClass.load_Fragment(false,fm);
-//                }
-//            }) {
-//
-//                @Override
-//                protected Map<String, String> getParams(){
-//                    Map<String, String> params = new HashMap<>();
-//                    String images=getStringImage(bitmap);
-//                    params.put("Avatar", images);
-//                    return params;
-//                }
-//            };
-//            // Add the request to the RequestQueue.
-//            queue.add(stringRequest);
-//        }
-//    }
-//
-//    public String getStringImage(Bitmap bitmap)
-//    {
-//        ByteArrayOutputStream baos=new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-//        byte[] b= baos.toByteArray();
-//        String temp= Base64.encodeToString(b, Base64.DEFAULT);
-//        return  temp;
-//    }
-
-
-
-//
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-//
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-//
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     * <p>
-//     * See the Android Training lesson <a href=
-//     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
-//     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
-//    }
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void Done(User user, User userData);
+    }
 }

@@ -8,6 +8,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -113,7 +114,7 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
                          public void onResponse(String response) {
                              // Display the first 500 characters of the response string.
 
-                             //Log.d("sadder msg:", response);
+                             Log.d("sadder msg:", response);
                              try {
                                  JSONObject jObject = new JSONObject(response);
                                  boolean notFound = jObject.getBoolean("IsEmpty");
