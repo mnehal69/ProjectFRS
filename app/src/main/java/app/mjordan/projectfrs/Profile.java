@@ -65,7 +65,7 @@ public class Profile extends Fragment implements View.OnClickListener {
     Button SignIn;
     //private OnFragmentInteractionListener mListener;
     MKB_DB dbHelper;
-    LinearLayout offLogin;
+    LinearLayout offLogin,Menu;
     RelativeLayout onLogin;
     String type="Guest";
     CircleImageView userPic;
@@ -76,6 +76,7 @@ public class Profile extends Fragment implements View.OnClickListener {
     ListView listView;
     ArrayList<ProfileList> profileListArrayList;
     int ListType=0;
+    Boolean show=false;
     public Profile() {
         // Required empty public constructor
 
@@ -108,6 +109,7 @@ public class Profile extends Fragment implements View.OnClickListener {
         SignIn= (Button) view.findViewById(R.id.SignIn);
         onLogin=(RelativeLayout) view.findViewById(R.id.OnLogin);
         offLogin=(LinearLayout)view.findViewById(R.id.NotLogin);
+        Menu=(LinearLayout)view.findViewById(R.id.profile_menu);
         userPic=(CircleImageView) view.findViewById(R.id.profile_image);
         listView=(ListView)view.findViewById(R.id.list);
         helperClass=new HelperClass(getContext());
@@ -151,6 +153,7 @@ public class Profile extends Fragment implements View.OnClickListener {
 
         SignIn.setOnClickListener(this);
         userPic.setOnClickListener(this);
+        Menu.setOnClickListener(new OnMenuProfileOverflowListerner(getContext()));
     }
 
     @Override
@@ -189,14 +192,7 @@ public class Profile extends Fragment implements View.OnClickListener {
         uploadFile();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        if (activity != null) {
-            activity.getSupportActionBar().show();
-        }
-    }
+
 
     // Uploading Image/Video
     private void uploadFile() {

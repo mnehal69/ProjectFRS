@@ -29,7 +29,7 @@ public class Order extends Fragment {
         super.onResume();
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         if (activity != null) {
-            activity.getSupportActionBar().hide();
+
         }
     }
 

@@ -11,7 +11,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="5sp"
-        android:background="@drawable/tab"
         android:focusable="true">
         <ImageView
             android:src="@drawable/money_silver"
@@ -27,7 +26,6 @@
         android:padding="5sp"
         android:clickable="true"
         android:id="@+id/Tab_2"
-        android:background="@drawable/tab"
         android:focusable="true">
         <ImageView
             android:src="@drawable/pizza_silver"
@@ -44,7 +42,6 @@
         android:padding="5sp"
         android:clickable="true"
         android:id="@+id/Tab_3"
-        android:background="@drawable/tab"
         android:focusable="true">
         <ImageView
             android:background="@color/Transparent"

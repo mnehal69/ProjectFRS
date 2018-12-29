@@ -33,7 +33,7 @@
             android:name=".RegisterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".MainActivity"  android:windowSoftInputMode="adjustPan"  />
+        <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar"  android:windowSoftInputMode="adjustPan"  />
         <activity
             android:name=".ForgetPassword"
             android:theme="@style/AppTheme.NoActionBar" />

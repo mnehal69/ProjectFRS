@@ -2,8 +2,11 @@
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     android:color="#2affffff">
     <item>
+
         <shape android:shape="rectangle">
+            <padding android:top="10sp" android:bottom="10sp" android:left="8sp" android:right="8sp"/>
             <solid android:color="@color/Background"/>
+            <corners android:radius="70sp"/>
         </shape>
     </item>
 </ripple>

@@ -19,17 +19,15 @@ import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBottomNavListerner,ImageChoice.OnImageChoiceListerner {
     MKB_DB dbHelper;
-    ActionBar toolbar;
+
     FragmentTransaction ft;
     String type,json,list;
-    ActionBar actionBar;
-    Boolean show=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dbHelper = new MKB_DB(this);
-        toolbar=getSupportActionBar();
+
         type=getIntent().getExtras().getString("Type","Guest");
         FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
         json = getIntent().getExtras().getString("UserData",null);
@@ -42,83 +40,80 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
         profile.setArguments(bundle);
         ft.add(R.id.TabFragment,profile);
         ft.commit();
-        PersmissionUtils.checkAndRequestPermissions(MainActivity.this);
-        actionBar=getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setTitle("Setting");
+        //PersmissionUtils.checkAndRequestPermissions(MainActivity.this);
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater=getMenuInflater();
-        inflater.inflate(R.menu.login_menu,menu);
-        MenuItem item1=menu.findItem(R.id.done);
-        MenuItem item2=menu.findItem(R.id.edit);
-        if(show!=null){
-            if(show){
-                item1.setVisible(show);
-                item2.setVisible(!show);
-            }else{
-                item1.setVisible(show);
-                item2.setVisible(!show);
-            }
-        }
-        return true;
-    }
-
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
-        Profile profile;
-        Bundle bundle;
-        switch (item.getItemId()){
-            case R.id.LogOut:
-                dbHelper.DeleteAll_IsLogged();
-                Intent login=new Intent(this,Login.class);
-                login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(login);
-                break;
-            case R.id.edit:
-                list="Edit";
-                profile=new Profile();
-                bundle=new Bundle();
-               bundle.putString("Type",type);
-                bundle.putString("json",json);
-                bundle.putString("ListType",list);
-                profile.setArguments(bundle);
-                ft.replace(R.id.TabFragment,profile);
-                show=true;
-                invalidateOptionsMenu();
-                ft.commit();
-                break;
-            case R.id.done:
-                list="List";
-                profile=new Profile();
-                bundle=new Bundle();
-                bundle.putString("Type",type);
-                bundle.putString("json",json);
-                bundle.putString("ListType",list);
-                profile.setArguments(bundle);
-                ft.replace(R.id.TabFragment,profile);
-                show=false;
-                invalidateOptionsMenu();
-                ft.commit();
-                break;
-        }
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater=getMenuInflater();
+//        inflater.inflate(R.menu.login_menu,menu);
+//        MenuItem item1=menu.findItem(R.id.done);
+//        MenuItem item2=menu.findItem(R.id.edit);
+//        if(show!=null){
+//            if(show){
+//                item1.setVisible(show);
+//                item2.setVisible(!show);
+//            }else{
+//                item1.setVisible(show);
+//                item2.setVisible(!show);
+//            }
+//        }
+//        return true;
+//    }
+//
+//
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
+//        Profile profile;
+//        Bundle bundle;
+//        switch (item.getItemId()){
+//            case R.id.LogOut:
+//
+//                break;
+//            case R.id.edit:
+//                list="Edit";
+//                profile=new Profile();
+//                bundle=new Bundle();
+//               bundle.putString("Type",type);
+//                bundle.putString("json",json);
+//                bundle.putString("ListType",list);
+//                profile.setArguments(bundle);
+//                ft.replace(R.id.TabFragment,profile);
+//                show=true;
+//                invalidateOptionsMenu();
+//                ft.commit();
+//                break;
+//            case R.id.done:
+//                list="List";
+//                profile=new Profile();
+//                bundle=new Bundle();
+//                bundle.putString("Type",type);
+//                bundle.putString("json",json);
+//                bundle.putString("ListType",list);
+//                profile.setArguments(bundle);
+//                ft.replace(R.id.TabFragment,profile);
+//                show=false;
+//                invalidateOptionsMenu();
+//                ft.commit();
+//                break;
+//        }
+//        return true;
+//    }
 
     @Override
     public void fragment(int n) {
         FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
         switch(n){
             case 1:
+
                 ft.replace(R.id.TabFragment,new Order());
                 Log.d("zxc","CASE1");
                 break;
             case 2:
+
                 ft.replace(R.id.TabFragment,new Eat());
                 Log.d("zxc","CASE2");
                 break;
