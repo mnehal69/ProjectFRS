@@ -1,7 +1,6 @@
 package app.mjordan.projectfrs;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 

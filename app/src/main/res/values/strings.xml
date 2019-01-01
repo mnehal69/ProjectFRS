@@ -61,4 +61,7 @@
     <string name="facebook_app_id">598098697330732</string>
     <string name="fb_login_protocol_scheme">fb598098697330732</string>
     <string name="id">ID</string>
+    <string name="restaurent_around_you">Restaurent Around You</string>
+    <string name="_4_7">4.7</string>
+    <string name="location">Location</string>
 </resources>

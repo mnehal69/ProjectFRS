@@ -10,12 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -88,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
                                     Bundle bundle=new Bundle();
                                     bundle.putString("Res",res);
                                     bundle.putString("Popular",popular);
+                                    eat.setArguments(bundle);
                                     ft.replace(R.id.TabFragment, eat);
                                     ft.commit();
                                 }else{

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="Yellow">#f0d700</color>
     <color name="Transparent">#00243b55</color>
     <color name="LauncherBackground">#017A69</color>
     <color name="colorPrimary">#3F50B4</color>

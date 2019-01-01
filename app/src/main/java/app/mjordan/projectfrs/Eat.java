@@ -6,10 +6,30 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 ///**
@@ -20,7 +40,12 @@ import android.widget.Button;
 // */
 public class Eat extends Fragment {
     //private OnFragmentInteractionListener mListener;
-
+    private RecyclerView recyclerView;
+    private ListView list;
+    private ArrayList<Rest_List> rest_list = new ArrayList<>();
+    private PopularAdapter mAdapter;
+    private Bundle bundle;
+    private String res;
     public Eat() {
         // Required empty public constructor
     }
@@ -29,13 +54,48 @@ public class Eat extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        bundle=getArguments();
+        if(bundle!=null) {
+            res = bundle.getString("Res");
+        }
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_eat, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Bundle bundle=getArguments();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    JSONArray obj = new JSONArray(res);
+                    int i,size=obj.length();
+                    for(i=0;i<size;i++){
+                        JSONObject jobj= (JSONObject) obj.get(i);
+                        rest_list.add(new Rest_List(jobj.getString("RID"),getResources().getString(R.string.website)+jobj.getString("RLogo"),jobj.getString("RName"),jobj.getBoolean("Popular"),getResources().getString(R.string.website)+jobj.getString("RBackground"),jobj.getString("RDest"),jobj.getString("Location"),jobj.getString("RTime"),jobj.getString("Rating")));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+            recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+            mAdapter = new PopularAdapter(rest_list);
+            LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(mAdapter);
+            final FragmentTransaction ft= getFragmentManager().beginTransaction();
+            Restaurent_List_Fragment list =new Restaurent_List_Fragment();
+           Bundle bundle=new Bundle();
+          bundle.putString("Res",res);
+           list.setArguments(bundle);
+            ft.add(R.id.ListFragment,list);
+            ft.commit();
+
+
 
     }
     //    // TODO: Rename method, update argument and hook method into UI event
