@@ -26,6 +26,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,13 +37,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
     MKB_DB dbHelper;
     HelperClass helperClass;
     FragmentTransaction ft;
-    String type,json,list;
+    boolean obtainList=false;
+    String type,json,list,server_url,res,popular;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dbHelper = new MKB_DB(this);
         helperClass=new HelperClass(this);
+        server_url=getResources().getString(R.string.website)+"res/eat_list.php";
         type=getIntent().getExtras().getString("Type","Guest");
         FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
         json = getIntent().getExtras().getString("UserData",null);
@@ -56,9 +59,57 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
         ft.add(R.id.TabFragment,profile);
         ft.commit();
         PersmissionUtils.checkAndRequestPermissions(MainActivity.this);
-
     }
 
+    public void fetch_list() {
+        /*
+         *
+         * VOLLEY PASS THE PARAMETER (WHICH ARE IN GET_PARAMS) TO SERVER_URL
+         * USTING GET OR POST METHOD AND THEN RECEIVE THE RESPONSE OF THE WEBSITE
+         * */
+        final FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
+        if (helperClass.Check_Internet()) {
+            // Instantiate the RequestQueue.
+            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+            // Request a string response from the provided URL.
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            // Display the first 500 characters of the response string.
+                            Log.d("zxc msg:", response);
+                            try {
+                                JSONObject jObject = new JSONObject(response);
+                                obtainList =!(jObject.getBoolean("NoList"));
+                                if(obtainList){
+                                    res=String.valueOf(jObject.getJSONArray("restaurent"));
+                                    popular=String.valueOf(jObject.getJSONArray("Popular"));
+                                    Eat eat =new Eat();
+                                    Bundle bundle=new Bundle();
+                                    bundle.putString("Res",res);
+                                    bundle.putString("Popular",popular);
+                                    ft.replace(R.id.TabFragment, eat);
+                                    ft.commit();
+                                }else{
+                                    res=null;
+                                    popular=null;
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                    //Log.d("sadder error:", "That didn't work!");
+                }
+            });
+            // Add the request to the RequestQueue.
+            queue.add(stringRequest);
+        }
+
+    }
 
     @Override
     public void fragment(int n) {
@@ -71,8 +122,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
                 break;
             case 2:
 
-                ft.replace(R.id.TabFragment,new Eat());
                 Log.d("zxc","CASE2");
+                ft.replace(R.id.TabFragment,new LoadingMain());
+                fetch_list();
                 break;
             case 3:
                 Log.d("zxc","CASE3");
