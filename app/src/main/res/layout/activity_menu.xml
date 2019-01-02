@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MenuActivity"
-    android:background="@color/Background">
+    android:background="@color/Background"
+    android:orientation="vertical">
     <android.support.v4.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -17,15 +18,36 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:descendantFocusability="blocksDescendants">
-            <ImageView
-                android:scaleType="fitXY"
-                android:src="@mipmap/back_pic"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="200sp" />
+                android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/rest_background"
+                android:scaleType="fitXY"
+                android:src="@drawable/demo"
+                android:layout_width="match_parent"
+                android:layout_height="200sp"
+                android:contentDescription="@string/background" />
+                <ImageView
+                    android:id="@+id/rest_Logo"
+                    android:layout_marginTop="140dp"
+                    android:layout_marginEnd="20sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:src="@drawable/subway_logo"
+                    android:layout_width="120sp"
+                    android:layout_height="120sp"
+                    android:contentDescription="@string/imagelogo" />
+            </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/menu_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
     <FrameLayout
+        android:visibility="gone"
         android:id="@+id/loading_menu_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

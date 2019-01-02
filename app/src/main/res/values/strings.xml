@@ -64,4 +64,7 @@
     <string name="restaurent_around_you">Restaurent Around You</string>
     <string name="_4_7">4.7</string>
     <string name="location">Location</string>
+    <string name="background">background</string>
+    <string name="imagelogo">imageLogo</string>
+    <string name="rs_315">Rs 315</string>
 </resources>

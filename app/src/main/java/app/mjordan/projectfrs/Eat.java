@@ -90,6 +90,9 @@ public class Eat extends Fragment {
             @Override
             public void onItemClick(Rest_List restList) {
                 Intent menu =new Intent(getApplicationContext(),MenuActivity.class);
+                menu.putExtra("ID",restList.getId());
+                menu.putExtra("Logo",restList.getLogo());
+                menu.putExtra("Background",restList.getBackground());
                 startActivityForResult(menu,MENU_ACTIVITY_ORDER);
             }
         };

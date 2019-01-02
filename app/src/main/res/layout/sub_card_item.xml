@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:background="#68000000"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="100sp"
+    android:padding="10sp"
+    android:baselineAligned="false"
+    android:layout_marginBottom="10sp">
+   <LinearLayout
+       android:paddingStart="25sp"
+       android:paddingEnd="0sp"
+       android:gravity="center"
+       android:layout_weight="1"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical">
+       <TextView
+           android:id="@+id/title"
+           android:textStyle="bold"
+           android:textColor="@color/Card"
+           android:textSize="16sp"
+           android:text="@string/dummy_name"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content" />
+       <TextView
+           android:id="@+id/Des"
+           android:textColor="@color/PrimaryText"
+           android:textSize="14sp"
+           android:text="@string/dummy_name"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content" />
+   </LinearLayout>
+    <LinearLayout
+        android:layout_gravity="center"
+        android:background="@color/Card"
+        android:orientation="vertical"
+        android:layout_width="2dp"
+        android:layout_height="50sp"/>
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_weight="2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/Price"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/PrimaryText"
+            android:textSize="25sp"
+            android:text="@string/rs_315"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>
