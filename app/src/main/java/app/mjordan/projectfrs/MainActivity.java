@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
     FragmentTransaction ft;
     boolean obtainList=false;
     String type,json,list,server_url,res,popular;
+    private int MENU_ACTIVITY_ORDER=2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,6 +1,7 @@
 package app.mjordan.projectfrs;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -29,6 +31,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static android.app.Activity.RESULT_OK;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 
@@ -46,6 +49,7 @@ public class Eat extends Fragment {
     private PopularAdapter mAdapter;
     private Bundle bundle;
     private String res;
+    private int MENU_ACTIVITY_ORDER=2;
     public Eat() {
         // Required empty public constructor
     }
@@ -81,8 +85,17 @@ public class Eat extends Fragment {
             }
         }).start();
 
+
+        PopularItemClickListener listener = new PopularItemClickListener() {
+            @Override
+            public void onItemClick(Rest_List restList) {
+                Intent menu =new Intent(getApplicationContext(),MenuActivity.class);
+                startActivityForResult(menu,MENU_ACTIVITY_ORDER);
+            }
+        };
+
             recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-            mAdapter = new PopularAdapter(rest_list);
+            mAdapter = new PopularAdapter(listener,rest_list);
             LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -94,10 +107,21 @@ public class Eat extends Fragment {
            list.setArguments(bundle);
             ft.add(R.id.ListFragment,list);
             ft.commit();
-
-
-
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==MENU_ACTIVITY_ORDER && resultCode==RESULT_OK){
+            if(data!=null){
+                String d=data.getExtras().getString("zxc");
+                Log.d("cxz",d);
+            }
+        }
+    }
+    public interface RecyclerViewClickListener {
+        void onClick(View view, int position);
+    }
+
     //    // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
 //        if (mListener != null) {

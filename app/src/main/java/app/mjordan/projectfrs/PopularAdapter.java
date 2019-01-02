@@ -1,7 +1,11 @@
 package app.mjordan.projectfrs;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +19,9 @@ import java.util.ArrayList;
 public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.MyViewHolder> {
 
     private ArrayList<Rest_List> popularList;
+    PopularItemClickListener listener;
+
+
     class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView img;
         LinearLayout popular_list;
@@ -27,7 +34,8 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.MyViewHo
     }
 
 
-    public PopularAdapter(ArrayList<Rest_List> profilesList) {
+    public PopularAdapter(PopularItemClickListener listener,ArrayList<Rest_List> profilesList) {
+        this.listener=listener;
         this.popularList = profilesList;
     }
 
@@ -39,8 +47,14 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.MyViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Rest_List popular = popularList.get(position);
+    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
+        final Rest_List popular = popularList.get(position);
+        holder.popular_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onItemClick(popular);
+            }
+        });
         Picasso.get().load(popular.getLogo()).into(holder.img);
     }
 
