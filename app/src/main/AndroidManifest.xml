@@ -46,7 +46,7 @@
         <activity
             android:name=".ForgetPassword"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MenuActivity"></activity>
+        <activity android:name=".MenuActivity" android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
