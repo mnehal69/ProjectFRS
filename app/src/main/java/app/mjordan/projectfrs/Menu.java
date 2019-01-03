@@ -7,9 +7,11 @@ public class Menu {
     private String Product;
     private String Des;
     private String Price;
-    private boolean IsTitle=false;
+    private boolean IsTitle;
+    private boolean IsDesc;
 
-    public Menu(boolean isTitle,String ID,String title,String type,String product,String des,String price) {
+    Menu(boolean isDesc,boolean isTitle, String ID, String title, String type, String product, String des, String price) {
+        this.IsDesc=isDesc;
         this.IsTitle = isTitle;
         this.ID=ID;
         this.title=title;
@@ -74,5 +76,13 @@ public class Menu {
 
     public void setPrice(String price) {
         Price = price;
+    }
+
+    public boolean isDesc() {
+        return IsDesc;
+    }
+
+    public void setDesc(boolean desc) {
+        IsDesc = desc;
     }
 }

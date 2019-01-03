@@ -28,7 +28,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBottomNavListerner,ImageChoice.OnImageChoiceListerner,Profile.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBottomNavListerner,ImageChoice.OnImageChoiceListerner,Profile.OnFragmentInteractionListener,Eat.OnFragmentInteractionListener {
     MKB_DB dbHelper;
     HelperClass helperClass;
     FragmentTransaction ft;
@@ -252,4 +252,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
         }
     }
 
+    @Override
+    public void BottomNavChangeTav(int tab) {
+        BottomNavBar frag = (BottomNavBar) getSupportFragmentManager().findFragmentById(R.id.Fragment);
+        frag.FunctionClick(tab);
+    }
 }
