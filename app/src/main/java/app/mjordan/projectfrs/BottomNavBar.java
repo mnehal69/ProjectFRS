@@ -50,22 +50,20 @@ public class BottomNavBar extends Fragment implements View.OnClickListener {
         imageView.setImageDrawable(getResources().getDrawable(i));
     }
 
-    public void FunctionClick(int i) {
+    public void TabChanged(int i) {
         Tab_Icon(tab1,R.drawable.money_silver);
         Tab_Icon(tab2,R.drawable.pizza_silver);
         Tab_Icon(tab3,R.drawable.face_silver);
         switch (i){
             case 1:
                 Tab_Icon(tab1,R.drawable.money);
-                mListener.fragment(1);
+
                 break;
             case 2:
                 Tab_Icon(tab2,R.drawable.pizza);
-                mListener.fragment(2);
                 break;
             case 3:
                 Tab_Icon(tab3,R.drawable.face);
-                mListener.fragment(3);
                 break;
         }
     }

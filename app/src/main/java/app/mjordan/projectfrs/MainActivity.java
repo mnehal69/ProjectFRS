@@ -25,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -113,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
         FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
         switch(n){
             case 1:
-
                 ft.replace(R.id.TabFragment,new Order());
                 Log.d("zxc","CASE1");
                 break;
@@ -255,6 +255,22 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
     @Override
     public void BottomNavChangeTav(int tab) {
         BottomNavBar frag = (BottomNavBar) getSupportFragmentManager().findFragmentById(R.id.Fragment);
-        frag.FunctionClick(tab);
+        frag.TabChanged(tab);
     }
+
+    @Override
+    public void OrderFragment(ArrayList<String> Id_list,ArrayList<String> NameList, ArrayList<Integer> itemList,ArrayList<Integer> priceList) {
+        FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
+        Order order=new Order();
+        Bundle bundle=new Bundle();
+        bundle.putStringArrayList("Id",Id_list);
+        bundle.putIntegerArrayList("item",itemList);
+        bundle.putStringArrayList("name",NameList);
+        bundle.putIntegerArrayList("price",priceList);
+        order.setArguments(bundle);
+        ft.replace(R.id.TabFragment,order);
+        ft.commit();
+    }
+
+
 }

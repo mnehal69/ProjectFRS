@@ -20,13 +20,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.NameList;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +47,9 @@ public class MenuActivity extends AppCompatActivity implements Counter.OnFragmen
     int total_quantity;
     ImageBadgeView cart;
     private ArrayList<String> IDList=new ArrayList<>();
+    private ArrayList<String> Namelist=new ArrayList<>();
     private ArrayList<Integer> itemlist=new ArrayList<>();
+    private ArrayList<Integer> Pricelist=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +65,7 @@ public class MenuActivity extends AppCompatActivity implements Counter.OnFragmen
                   final FragmentTransaction fm = getSupportFragmentManager().beginTransaction();
                   Bundle bundle=new Bundle();
                   Counter counter=new Counter();
+                  bundle.putString("name",menu.getProduct());
                   bundle.putString("itemID",menu.getID());
                   bundle.putString("item",menu.getProduct());
                   bundle.putString("Price",menu.getPrice());
@@ -98,12 +104,17 @@ public class MenuActivity extends AppCompatActivity implements Counter.OnFragmen
         menuList.setAdapter(mAdapter);
 
         fetch();
+        Gson gson= new Gson();
 
         cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bundle args = new Bundle();
                 Intent intent=new Intent(getBaseContext(),MainActivity.class);
-                intent.putExtra("zxc","zxc321");
+                intent.putExtra("name",Namelist);
+                intent.putExtra("id",IDList);
+                intent.putExtra("item",itemlist);
+                intent.putExtra("price",Pricelist);
                 setResult(RESULT_OK,intent);
                 finish();//finishing activity
             }
@@ -183,24 +194,38 @@ public class MenuActivity extends AppCompatActivity implements Counter.OnFragmen
     }
 
     @Override
-    public void UpdateOrder(String itemId, int item) {
-        if(item>0) {
+    public void UpdateOrder(String itemId,String name, int item,int price) {
             if (IDList.contains(itemId)) {
+                if (item > 0) {
                 int index = IDList.indexOf(itemId);
                 itemlist.remove(index);
+                Pricelist.remove(index);
                 itemlist.add(index, item);
-            } else {
+                Pricelist.add(index,price);
+                Namelist.add(index,name);
+                }
+                if (item == 0) {
+                    int index = IDList.indexOf(itemId);
+                    IDList.remove(itemId);
+                    itemlist.remove(index);
+                    Pricelist.remove(index);
+                    Namelist.remove(index);
+                }
+        }else {
                 IDList.add(itemId);
                 itemlist.add(item);
+                Pricelist.add(price);
+                Namelist.add(name);
             }
-            total_quantity=0;
-            for(int i=0;i<itemlist.size();i++){
-                total_quantity=total_quantity+itemlist.get(i);
-            }
-            cart.setBadgeValue(total_quantity);
-        }
-        Log.d("mlo",IDList.toString());
-        Log.d("mlo",itemlist.toString());
-    }
 
-}
+        total_quantity = 0;
+        for (int i = 0; i < itemlist.size(); i++) {
+            total_quantity = total_quantity + itemlist.get(i);
+        }
+        cart.setBadgeValue(total_quantity);
+        Log.d("mlo", IDList.toString());
+        Log.d("mlo", Namelist.toString());
+        Log.d("mlo", itemlist.toString());
+        Log.d("mlo", Pricelist.toString());
+        }
+    }

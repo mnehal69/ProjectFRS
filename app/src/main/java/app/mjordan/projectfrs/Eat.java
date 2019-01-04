@@ -112,18 +112,26 @@ public class Eat extends Fragment {
             ft.commit();
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==MENU_ACTIVITY_ORDER && resultCode==RESULT_OK){
             if(data!=null){
-                String d=data.getExtras().getString("zxc");
-                Log.d("cxz",d);
+                ArrayList<String> id= (ArrayList<String>)data.getStringArrayListExtra("id");
+                ArrayList<Integer> item=(ArrayList<Integer>)data.getExtras().getIntegerArrayList("item");
+                ArrayList<String> name=(ArrayList<String>)data.getExtras().getStringArrayList("name");
+                ArrayList<Integer> price=(ArrayList<Integer>)data.getExtras().getIntegerArrayList("price");
                 mListener.BottomNavChangeTav(1);
+                mListener.OrderFragment(id,name,item,price);
             }
         }
     }
+
+
+
     public interface RecyclerViewClickListener {
         void onClick(View view, int position);
+
     }
 
 
@@ -158,5 +166,6 @@ public class Eat extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void BottomNavChangeTav(int tab);
+        void OrderFragment(ArrayList<String> Id_list,ArrayList<String> NameList,ArrayList<Integer> itemList,ArrayList<Integer> priceList);
     }
 }

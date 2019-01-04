@@ -11,7 +11,7 @@
                 android:right="70dp"/>
             <stroke android:color="#fff" android:width="2dp" />
             <!--corners allow us to make the rounded corners button-->
-            <corners android:radius="30dp" />
+            <corners android:radius="30dp"  />
         </shape>
     </item>
     </ripple>

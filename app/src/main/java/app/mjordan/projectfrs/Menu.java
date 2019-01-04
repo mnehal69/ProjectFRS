@@ -1,6 +1,9 @@
 package app.mjordan.projectfrs;
 
-public class Menu {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Menu  {
     private String title;
     private String ID;
     private String Type;
@@ -10,15 +13,15 @@ public class Menu {
     private boolean IsTitle;
     private boolean IsDesc;
 
-    Menu(boolean isDesc,boolean isTitle, String ID, String title, String type, String product, String des, String price) {
-        this.IsDesc=isDesc;
+    Menu(boolean isDesc, boolean isTitle, String ID, String title, String type, String product, String des, String price) {
+        this.IsDesc = isDesc;
         this.IsTitle = isTitle;
-        this.ID=ID;
-        this.title=title;
-        this.Type=type;
-        this.Product=product;
-        this.Des=des;
-        this.Price=price;
+        this.ID = ID;
+        this.title = title;
+        this.Type = type;
+        this.Product = product;
+        this.Des = des;
+        this.Price = price;
     }
 
     public boolean getIsTitle() {
@@ -26,7 +29,7 @@ public class Menu {
     }
 
     public void setIsTitle(boolean IsTitle) {
-        this.IsTitle=IsTitle;
+        this.IsTitle = IsTitle;
     }
 
 
@@ -85,4 +88,5 @@ public class Menu {
     public void setDesc(boolean desc) {
         IsDesc = desc;
     }
+
 }

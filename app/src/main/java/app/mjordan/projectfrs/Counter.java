@@ -27,8 +27,10 @@ public class Counter extends DialogFragment implements View.OnClickListener {
     TextView title,quantity,price;
     ImageView add,remove,close;
     String Id;
-    String itemString;
+    String itemString,name;
     int total;
+    int position;
+    boolean changed=false;
     public Counter() {
         // Required empty public constructor
     }
@@ -54,6 +56,7 @@ public class Counter extends DialogFragment implements View.OnClickListener {
             item=Integer.parseInt(bundle.getString("value","0"));
             quantity.setText(String.valueOf(item));
             Id=bundle.getString("itemID","null");
+            name=bundle.getString("name","null");
             itemPrice=Integer.parseInt(bundle.getString("Price","0"));
             add.setOnClickListener(this);
             remove.setOnClickListener(this);
@@ -69,10 +72,12 @@ public class Counter extends DialogFragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.AddBtn:
+                changed=true;
                 item=item+1;
                 quantity.setText(String.valueOf(item));
                 break;
             case R.id.RemoveBtn:
+                changed=true;
                 item=item-1;
                 if(item<=0){
                     item=0;
@@ -80,7 +85,12 @@ public class Counter extends DialogFragment implements View.OnClickListener {
                 quantity.setText(String.valueOf(item));
                 break;
             case R.id.close_btn:
-                mListener.UpdateOrder(Id,item);
+                if(item!=0 && Integer.parseInt(quantity.getText().toString())!=0){
+                    changed=false;
+                }else{
+                    changed=true;
+                }
+                mListener.UpdateOrder(Id,name,item,itemPrice);
                 dismiss();
                 break;
         }
@@ -124,6 +134,6 @@ public class Counter extends DialogFragment implements View.OnClickListener {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void UpdateOrder(String itemId,int item);
+        void UpdateOrder(String itemId,String name,int item,int price);
     }
 }
