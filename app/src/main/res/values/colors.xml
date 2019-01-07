@@ -12,7 +12,7 @@
     <color name="BackgroundTransparent">#60303030</color>
     <color name="Dialog">#424242</color>
     <color name="ErrorDialog">#B00020</color>
-    <color name="PrimaryText">#FFFFFF</color>
+    <color name="PrimaryText">#000</color>
     <color name="SecondaryText">#B3FFFFFF</color>
     <color name="Disabled">#80FFFFFF</color>
     <color name="Divider">#1FFFFFFF</color>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#009688</color>
+    <color name="colorPrimaryDark">#017A69</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="Background">#303030</color>
+    <color name="StatusBar">#303030</color>
+    <color name="ErrorDialog">#B00020</color>
+    <color name="FacebookBackground">#2b4170</color>
+    <color name="Yellow">#f0d700</color>
+    <color name="PrimaryText">#FFFFFF</color>
+</resources>

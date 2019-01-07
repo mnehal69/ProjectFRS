@@ -21,12 +21,12 @@
         android:contentDescription="@string/close_icon" />
     <TextView
         android:layout_marginTop="5sp"
-        android:textColor="#fff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login_with_mukbang_account"
         android:textStyle="bold"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        />
     <LinearLayout
         android:layout_marginTop="20sp"
         android:layout_width="match_parent"
@@ -40,14 +40,14 @@
         android:layout_marginTop="10dp"
         android:focusableInTouchMode="true"
         android:hint="@string/email_or_username"
-        android:textColorHint="@color/Card"
+        android:textColorHint="@color/colorPrimaryDark"
         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
         <EditText
             android:inputType="textEmailAddress"
-            android:backgroundTint="@color/Card"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:textSize="15sp"
             android:textColor="@color/PrimaryText"
-            android:textColorHint="@color/Card"
+            android:textColorHint="@color/colorPrimaryDark"
             android:textStyle="bold"
             android:id="@+id/UName"
             android:layout_width="match_parent"
@@ -64,16 +64,16 @@
         android:layout_marginTop="10dp"
         android:focusableInTouchMode="true"
         android:hint="@string/password"
-        android:textColorHint="@color/Card"
+        android:textColorHint="@color/colorPrimaryDark"
         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
         <EditText
             android:inputType="textPassword"
             android:paddingStart="20sp"
             android:paddingEnd="0sp"
-            android:backgroundTint="@color/Card"
+            android:backgroundTint="@color/colorPrimary"
             android:textSize="15sp"
             android:textColor="@color/PrimaryText"
-            android:textColorHint="@color/Card"
+            android:textColorHint="@color/colorPrimary"
             android:textStyle="bold"
             android:id="@+id/PName"
             android:layout_width="match_parent"
@@ -90,7 +90,7 @@
             android:layout_width="wrap_content"
             android:textColor="#fff"
             android:textSize="15sp"
-            android:backgroundTint="@color/Card"
+            android:backgroundTint="@color/colorPrimary"
             android:text="@string/login_text"/>
         <LinearLayout
         android:layout_width="match_parent"
@@ -102,7 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/forget_password"
-            android:textColor="@color/Card"
+            android:textColor="@color/colorPrimary"
             android:textIsSelectable="false"
             android:textStyle="normal"
             android:textSize="12sp"
@@ -116,7 +116,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:textColor="@color/Card"
+        android:textColor="@color/colorPrimary"
         android:textSize="12sp"
         android:text="@string/new_to_mukbang_signup"/>
     </LinearLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!---Day-->
+    <color name="Yellow">@color/ErrorDialog</color>
+    <color name="Transparent">#00243b55</color>
+    <color name="LauncherBackground">#017A69</color>
+    <color name="colorPrimary">#9C27B0</color>
+    <color name="colorPrimaryDark">#9C27B0</color>
+    <color name="colorAccent">#FF3F80</color>
+    <color name="StatusBar">#FFF</color>
+    <color name="AppBar">#212121</color>
+    <color name="Background">#FFF</color>
+    <color name="BackgroundTransparent">#60303030</color>
+    <color name="Dialog">#424242</color>
+    <color name="PrimaryText">#212121</color>
+    <color name="SecondaryText">#B3FFFFFF</color>
+    <color name="Disabled">#80FFFFFF</color>
+    <color name="Divider">#1FFFFFFF</color>
+    <!--both-->
+    <color name="ErrorDialog">#B00020</color>
+    <color name="Card">#009688</color>
+    <color name="FacebookBackground">#2b4170</color>
+</resources>

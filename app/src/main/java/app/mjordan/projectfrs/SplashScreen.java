@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -29,6 +30,7 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         MKB_DB dbHelper = new MKB_DB(this);
         Window window = getWindow();
         server_url=getResources().getString(R.string.website)+"user/check.php";

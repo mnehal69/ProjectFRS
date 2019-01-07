@@ -19,9 +19,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.activity_login);
 
         //SETTING THE COLOR OF THE STATUS BAR
-        Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(Color.parseColor("#243b55"));
+        //Window window = getWindow();
+        //window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        //window.setStatusBarColor(Color.parseColor("#243b55"));
         //INTIALIZING THE BUTTON
         FacebookLogin= (Button) findViewById(R.id.facebook);
         EmailSignUp= (Button) findViewById(R.id.email);
