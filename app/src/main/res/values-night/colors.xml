@@ -11,4 +11,8 @@
     <color name="FacebookBackground">#2b4170</color>
     <color name="Yellow">#f0d700</color>
     <color name="PrimaryText">#FFFFFF</color>
+    <color name="startColor">#017A69</color>
+    <color name="endColor">#00706D</color>
+    <color name="centerColor">#00676E</color>
+
 </resources>

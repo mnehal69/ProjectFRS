@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".Profile"
     android:orientation="vertical"
-    android:padding="20sp">
+    android:padding="20dp">
 
 
     <LinearLayout
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/NotLogin"
         android:gravity="center"
         android:layout_width="match_parent"
@@ -17,33 +17,31 @@
         android:orientation="vertical">
         <ImageView
             android:src="@drawable/login"
-            android:layout_width="200sp"
-            android:layout_height="200sp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:contentDescription="@string/login_logo" />
         <TextView
             android:fontFamily="cursive"
             android:gravity="center"
             android:textStyle="bold"
-            android:textColor="#fff"
             android:text="@string/need_something_to_eat"
-            android:layout_width="150sp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content" />
         <TextView
             android:fontFamily="cursive"
             android:gravity="center"
             android:textStyle="bold"
-            android:textColor="#fff"
             android:text="@string/login_now_to_order"
-            android:layout_width="150sp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content" />
         <Button
-            android:layout_marginTop="20sp"
+            android:textColor="#FFF"
+            android:layout_marginTop="20dp"
             android:id="@+id/SignIn"
-            android:textColor="#fff"
             android:text="@string/login_now"
             android:textStyle="bold"
             android:background="@drawable/main_login"
-            android:layout_width="250sp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content" />
     </LinearLayout>
     <RelativeLayout
@@ -55,15 +53,15 @@
         <LinearLayout
             android:id="@+id/ActionBar"
             android:layout_width="match_parent"
-            android:layout_height="50sp"
+            android:layout_height="50dp"
             android:baselineAligned="false">
             <LinearLayout
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:layout_marginTop="10sp"
-                    android:layout_marginBottom="10sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:text="@string/setting"
                     android:textSize="20sp"
                     android:layout_width="wrap_content"
@@ -86,8 +84,8 @@
                     <ImageView
                         android:elevation="8dp"
                         android:src="@drawable/ic_done_black_24dp"
-                        android:layout_width="30sp"
-                        android:layout_height="30sp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:contentDescription="@string/done" />
                 </LinearLayout>
                 <LinearLayout
@@ -99,8 +97,8 @@
                     android:focusable="true">
                     <ImageView
                         android:src="@drawable/ic_more_vert_24dp"
-                        android:layout_width="30sp"
-                        android:layout_height="30sp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:contentDescription="@string/done" />
                 </LinearLayout>
             </LinearLayout>
@@ -110,13 +108,13 @@
 
 
         <LinearLayout
-            android:layout_marginTop="40sp"
+            android:layout_marginTop="40dp"
             android:id="@+id/SettingImage"
             android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginBottom="20sp">
+            android:layout_marginBottom="20dp">
             <de.hdodenhof.circleimageview.CircleImageView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/profile_image"
@@ -138,11 +136,11 @@
 
 <!--SWITCH TOGGLE-->
         <LinearLayout
-            android:layout_marginBottom="30sp"
+            android:layout_marginBottom="30dp"
             android:layout_alignParentBottom="true"
-            android:paddingBottom="20sp"
-            android:paddingStart="20sp"
-            android:paddingEnd="0sp"
+            android:paddingBottom="20dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">

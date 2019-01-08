@@ -20,4 +20,10 @@
     <color name="ErrorDialog">#B00020</color>
     <color name="Card">#009688</color>
     <color name="FacebookBackground">#2b4170</color>
+    <!--android:startColor="#9C27B0"-->
+    <!--android:endColor="#6C0082"-->
+    <!--android:centerColor="#BE4BD1"-->
+    <color name="startColor">#9C27B0</color>
+    <color name="endColor">#6C0082</color>
+    <color name="centerColor">#BE4BD1</color>
 </resources>
