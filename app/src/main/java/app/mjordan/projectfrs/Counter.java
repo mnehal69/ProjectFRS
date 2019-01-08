@@ -29,7 +29,6 @@ public class Counter extends DialogFragment implements View.OnClickListener {
     String Id;
     String itemString,name;
     int total;
-    int position;
     boolean changed=false;
     public Counter() {
         // Required empty public constructor
@@ -90,7 +89,7 @@ public class Counter extends DialogFragment implements View.OnClickListener {
                 }else{
                     changed=true;
                 }
-                mListener.UpdateOrder(Id,name,item,itemPrice);
+                mListener.UpdateOrder(changed,Id,name,item,itemPrice);
                 dismiss();
                 break;
         }
@@ -134,6 +133,6 @@ public class Counter extends DialogFragment implements View.OnClickListener {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void UpdateOrder(String itemId,String name,int item,int price);
+        void UpdateOrder(boolean changed,String itemId,String name,int item,int price);
     }
 }

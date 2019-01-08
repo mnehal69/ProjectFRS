@@ -19,13 +19,15 @@ public class OnMenuProfileOverflowListerner implements View.OnClickListener {
     private FragmentTransaction ft;
     Activity activity;
     private String type,json,ListType;
-    OnMenuProfileOverflowListerner(Context c,String type,String list,String json, FragmentTransaction ft){
+    private int night;
+    OnMenuProfileOverflowListerner(Context c,String type,String list,String json, FragmentTransaction ft,int night){
         this.mContext=c;
         dbHelper=new MKB_DB(c);
         this.ft=ft;
         this.type=type;
         this.json=json;
         this.ListType=list;
+        this.night=night;
     }
 
     @Override
@@ -42,6 +44,7 @@ public class OnMenuProfileOverflowListerner implements View.OnClickListener {
                         bundle.putString("Type",type);
                         bundle.putString("json",json);
                         bundle.putString("ListType",list);
+                        bundle.putInt("Toggle",night);
                         profile.setArguments(bundle);
                         ft.replace(R.id.TabFragment,profile);
                         ft.commit();

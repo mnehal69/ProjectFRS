@@ -3,6 +3,8 @@ package app.mjordan.projectfrs;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
@@ -10,7 +12,9 @@ import android.net.NetworkInfo;
 import android.support.design.widget.TextInputLayout;
 
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -20,10 +24,29 @@ public class HelperClass {
     private Context mContext;
     private Fragment prev;
     private LoadingDialog loadingDialog;
+    public static final String MyPREFERENCES = "Theme" ;
+    SharedPreferences sharedpreferences;
     HelperClass(Context context){
         this.mContext=context;
         prev = ((Activity)mContext).getFragmentManager().findFragmentByTag("loading_dialog");
         loadingDialog = new LoadingDialog();
+    }
+
+    public void Reload(Activity activity,Boolean Isnight,String type,String json)
+    {
+        sharedpreferences = activity.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        Window window = activity.getWindow();
+        if (Isnight){
+            window.setStatusBarColor(activity.getResources().getColor(R.color.SplashBackground));
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+        activity.finish();
+        Intent main = new Intent(activity, activity.getClass());
+        main.putExtra("Type",type);
+        main.putExtra("UserData",json);
+        activity.startActivity(main);
     }
 
     void Input_Error( EditText editText, String error, int id) {

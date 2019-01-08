@@ -39,6 +39,7 @@ import ru.nikartm.support.ImageBadgeView;
 public class MenuActivity extends AppCompatActivity implements Counter.OnFragmentInteractionListener {
     String id,logo,background,url;
     ImageView backgroundimg,logoimg,back;
+    MKB_DB dbHelper;
     HelperClass helperClass;
     RecyclerView menuList;
     LinearLayout noMenu;
@@ -58,7 +59,7 @@ public class MenuActivity extends AppCompatActivity implements Counter.OnFragmen
         FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
         ft.add(R.id.loading_menu_fragment,new LoadingMain());
         ft.commit();
-
+        dbHelper=new MKB_DB(this);
         DialogFragmentInterface listener =new DialogFragmentInterface() {
             @Override
             public void dialog_frag(Menu menu) {
@@ -115,6 +116,17 @@ public class MenuActivity extends AppCompatActivity implements Counter.OnFragmen
                 intent.putExtra("id",IDList);
                 intent.putExtra("item",itemlist);
                 intent.putExtra("price",Pricelist);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ArrayList<Menu> orderArrayList=new ArrayList<>();
+                        for(int iterate=0;iterate<IDList.size();iterate++){
+                            orderArrayList.add(new Menu(true,false, IDList.get(iterate),"","",Namelist.get(iterate),itemlist.get(iterate).toString(),Pricelist.get(iterate).toString()));
+                        }
+                        dbHelper.Insert_Order(orderArrayList);
+                    }
+                }).start();
+
                 setResult(RESULT_OK,intent);
                 finish();//finishing activity
             }
@@ -194,15 +206,16 @@ public class MenuActivity extends AppCompatActivity implements Counter.OnFragmen
     }
 
     @Override
-    public void UpdateOrder(String itemId,String name, int item,int price) {
+    public void UpdateOrder(boolean changed,String itemId,String name, int item,int price) {
+        if (!changed) {
             if (IDList.contains(itemId)) {
                 if (item > 0) {
-                int index = IDList.indexOf(itemId);
-                itemlist.remove(index);
-                Pricelist.remove(index);
-                itemlist.add(index, item);
-                Pricelist.add(index,price);
-                Namelist.add(index,name);
+                    int index = IDList.indexOf(itemId);
+                    itemlist.remove(index);
+                    Pricelist.remove(index);
+                    itemlist.add(index, item);
+                    Pricelist.add(index, price);
+                    Namelist.add(index, name);
                 }
                 if (item == 0) {
                     int index = IDList.indexOf(itemId);
@@ -211,21 +224,22 @@ public class MenuActivity extends AppCompatActivity implements Counter.OnFragmen
                     Pricelist.remove(index);
                     Namelist.remove(index);
                 }
-        }else {
+            } else {
                 IDList.add(itemId);
                 itemlist.add(item);
                 Pricelist.add(price);
                 Namelist.add(name);
             }
 
-        total_quantity = 0;
-        for (int i = 0; i < itemlist.size(); i++) {
-            total_quantity = total_quantity + itemlist.get(i);
+            total_quantity = 0;
+            for (int i = 0; i < itemlist.size(); i++) {
+                total_quantity = total_quantity + itemlist.get(i);
+            }
+            cart.setBadgeValue(total_quantity);
+            Log.d("mlo", IDList.toString());
+            Log.d("mlo", Namelist.toString());
+            Log.d("mlo", itemlist.toString());
+            Log.d("mlo", Pricelist.toString());
         }
-        cart.setBadgeValue(total_quantity);
-        Log.d("mlo", IDList.toString());
-        Log.d("mlo", Namelist.toString());
-        Log.d("mlo", itemlist.toString());
-        Log.d("mlo", Pricelist.toString());
-        }
+    }
     }

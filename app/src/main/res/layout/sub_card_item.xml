@@ -37,7 +37,7 @@
     <LinearLayout
         android:id="@+id/centerline"
         android:layout_gravity="center"
-        android:background="@color/Card"
+        android:background="@color/colorPrimary"
         android:orientation="vertical"
         android:layout_width="2dp"
         android:layout_height="50sp"/>

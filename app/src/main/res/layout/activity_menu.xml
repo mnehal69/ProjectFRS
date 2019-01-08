@@ -63,7 +63,7 @@
                     android:fontFamily="serif-monospace"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:textColor="@color/Card"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="25sp"
                     android:text="@string/no_menu"
                     android:layout_width="match_parent"

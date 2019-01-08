@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Profile"
     android:orientation="vertical"
     android:padding="20dp">
-
 
     <LinearLayout
         android:visibility="visible"
@@ -43,13 +42,14 @@
             android:background="@drawable/main_login"
             android:layout_width="250dp"
             android:layout_height="wrap_content" />
+
     </LinearLayout>
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/OnLogin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
         <LinearLayout
             android:id="@+id/ActionBar"
             android:layout_width="match_parent"
@@ -133,31 +133,32 @@
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-<!--SWITCH TOGGLE-->
-        <LinearLayout
-            android:layout_marginBottom="30dp"
-            android:layout_alignParentBottom="true"
-            android:paddingBottom="20dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="0dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_weight="1"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/PrimaryText"
-                android:text="@string/night_mode"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-            <Switch
-                android:theme="@style/ToggleSwitchTheme"
-                android:id="@+id/simpleSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
     </RelativeLayout>
 
-</LinearLayout>
+
+    <!--SWITCH TOGGLE-->
+    <LinearLayout
+        android:layout_marginBottom="30dp"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="20dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/PrimaryText"
+            android:text="@string/night_mode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <Switch
+            android:theme="@style/ToggleSwitchTheme"
+            android:id="@+id/ThemeSet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,7 +1,10 @@
 package app.mjordan.projectfrs;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 
 import android.support.v7.app.AppCompatActivity;
@@ -27,14 +30,26 @@ import java.util.Map;
 public class SplashScreen extends AppCompatActivity {
     private String server_url;
     HelperClass helperClass;
+    SharedPreferences sharedpreferences;
+    public static final String MyPREFERENCES = "Theme" ;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         MKB_DB dbHelper = new MKB_DB(this);
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         Window window = getWindow();
-        server_url=getResources().getString(R.string.website)+"user/check.php";
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //Use to wake screen on this app
+        server_url=getResources().getString(R.string.website)+"user/check.php";
+
+       Boolean night=sharedpreferences.getBoolean("NightTheme",false);
+
+        if (night){
+            window.setStatusBarColor(getResources().getColor(R.color.SplashBackground));
+           AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+       }else{
+           AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+       }
+
         helperClass=new HelperClass(this);
         Log.d("sadder", String.valueOf(dbHelper.getCount()));
 
@@ -45,6 +60,7 @@ public class SplashScreen extends AppCompatActivity {
             } else {
                 Log.d("sadder USERID", dbHelper.get_UserLoggedID());
                 fetch(dbHelper.get_UserLoggedID());
+                dbHelper.close();
             }
     }
 

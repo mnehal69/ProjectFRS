@@ -1,7 +1,9 @@
 package app.mjordan.projectfrs;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
@@ -9,8 +11,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -36,10 +41,23 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
     boolean obtainList=false;
     String type,json,list,server_url,res,popular;
     private int MENU_ACTIVITY_ORDER=2;
+    SharedPreferences sharedpreferences;
+    int night=0;
+    ArrayList<String> ItemId=new ArrayList<>(),NameList=new ArrayList<>();
+    ArrayList<Integer>quantityList=new ArrayList<>(),priceList=new ArrayList<>();
+    public static final String MyPREFERENCES = "Theme" ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        Window window = getWindow();
+        server_url=getResources().getString(R.string.website)+"user/check.php";
+        Boolean is_night=sharedpreferences.getBoolean("NightTheme",false);
+        if (is_night){
+            night=1;
+            window.setStatusBarColor(getResources().getColor(R.color.SplashBackground));
+        }
         dbHelper = new MKB_DB(this);
         helperClass=new HelperClass(this);
         server_url=getResources().getString(R.string.website)+"res/eat_list.php";
@@ -52,11 +70,24 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
         bundle.putString("Type",type);
         bundle.putString("json",json);
         bundle.putString("ListType",list);
+        bundle.putInt("Toggle",night);
         profile.setArguments(bundle);
         ft.add(R.id.TabFragment,profile);
         ft.commit();
         PersmissionUtils.checkAndRequestPermissions(MainActivity.this);
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        if(dbHelper.getOrderCount()>0 &&type.equals("User")){
+            ArrayList<Menu> return_array =dbHelper.Get_Order();
+            for(int i=0;i<return_array.size();i++){
+                ItemId.add(return_array.get(i).getID());
+                NameList.add(return_array.get(i).getProduct());
+                priceList.add(Integer.valueOf(return_array.get(i).getPrice()));
+                quantityList.add(Integer.valueOf(return_array.get(i).getDes()));
+            }
+        }
+        dbHelper.close();
     }
+
 
     public void fetch_list() {
         /*
@@ -114,11 +145,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
         FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
         switch(n){
             case 1:
-                ft.replace(R.id.TabFragment,new Order());
+                Order order=new Order();
+                Bundle Orderbundle=new Bundle();
+                Orderbundle.putStringArrayList("Id",ItemId);
+                Orderbundle.putIntegerArrayList("item",quantityList);
+                Orderbundle.putStringArrayList("name",NameList);
+                Orderbundle.putIntegerArrayList("price",priceList);
+                order.setArguments(Orderbundle);
+                ft.replace(R.id.TabFragment,order);
                 Log.d("zxc","CASE1");
                 break;
             case 2:
-
                 Log.d("zxc","CASE2");
                 ft.replace(R.id.TabFragment,new LoadingMain());
                 fetch_list();
@@ -131,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
                 bundle.putString("Type",type);
                 bundle.putString("json",json);
                 bundle.putString("ListType",list);
+                bundle.putInt("Toggle",night);
                 profile.setArguments(bundle);
                 ft.replace(R.id.TabFragment,profile);
                 break;
@@ -174,11 +212,28 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
             bundle.putString("Type",type);
             bundle.putString("json",json);
             bundle.putString("ListType",list);
+            bundle.putInt("Toggle",night);
             profile.setArguments(bundle);
             ft.replace(R.id.TabFragment,profile);
             ft.commit();
         }
 
+    }
+
+    @Override
+    public void Theme(Boolean Isnight) {
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.clear();
+        if (Isnight) {
+            night=1;
+            editor.putBoolean("NightTheme",true);
+        }else {
+            night=0;
+            editor.putBoolean("NightTheme",false);
+        }
+        editor.apply();
+        helperClass.Reload(this,Isnight,type,json);
     }
 
 
@@ -215,6 +270,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
                                     bundle.putString("Type",type);
                                     bundle.putString("json",json);
                                     bundle.putString("ListType",list);
+                                    bundle.putInt("Toggle",night);
                                     profile.setArguments(bundle);
                                     ft.replace(R.id.TabFragment,profile);
                                     ft.commit();
@@ -261,6 +317,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
     @Override
     public void OrderFragment(ArrayList<String> Id_list,ArrayList<String> NameList, ArrayList<Integer> itemList,ArrayList<Integer> priceList) {
         FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
+        this.ItemId=Id_list;
+        this.NameList=NameList;
+        this.priceList=priceList;
+        this.quantityList=itemList;
         Order order=new Order();
         Bundle bundle=new Bundle();
         bundle.putStringArrayList("Id",Id_list);

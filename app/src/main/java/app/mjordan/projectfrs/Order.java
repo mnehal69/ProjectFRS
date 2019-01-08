@@ -15,7 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -29,11 +31,15 @@ import java.util.ArrayList;
 public class Order extends Fragment {
 
    // private OnFragmentInteractionListener mListener;
-    ArrayList<String> ItemId,NameList;
-    ArrayList<Integer>quantityList,priceList;
+    MKB_DB dbHelper;
+    ArrayList<String> ItemId=new ArrayList<>(),NameList=new ArrayList<>();
+    ArrayList<Integer>quantityList=new ArrayList<>(),priceList=new ArrayList<>();
     RecyclerView orderList;
     NestedScrollView Order;
     LinearLayout noOrder;
+    TextView bill,fees,totalbill;
+    int total=0,fee=200,total_amount;
+    ImageButton close;
     private ArrayList<Menu> orderArrayList=new ArrayList<>();
     CustomOrderAdapter mAdapter;
     public Order() {
@@ -55,11 +61,36 @@ public class Order extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        dbHelper=new MKB_DB(getContext());
         Bundle bundle=getArguments();
+        close=(ImageButton)view.findViewById(R.id.OrderClose);
         Order=(NestedScrollView)view.findViewById(R.id.Order);
         orderList=(RecyclerView)view.findViewById(R.id.menu_list);
         noOrder=(LinearLayout)view.findViewById(R.id.NoOrder);
-        mAdapter = new CustomOrderAdapter(getContext(),orderArrayList);
+        bill=(TextView)view.findViewById(R.id.Bill);
+        fees=(TextView)view.findViewById(R.id.Fees);
+        totalbill=(TextView)view.findViewById(R.id.TotalBill);
+        OrderFragmentInterface listerner= new OrderFragmentInterface() {
+            @Override
+            public void OrderChanged(String ID, int item) {
+                if (!ItemId.isEmpty()) {
+                    if (ItemId.contains(ID)) {
+                        total=0;
+                        int index = ItemId.indexOf(ID);
+                        quantityList.remove(index);
+                        quantityList.add(index, item);
+                        for(int iterate=0;iterate<ItemId.size();iterate++){
+                            total=total+(priceList.get(iterate)*quantityList.get(iterate));
+                        }
+                        bill.setText(String.valueOf(total));
+                        total_amount=total+fee;
+                        totalbill.setText(String.valueOf(total_amount));
+                    }
+                }
+            }
+        };
+
+        mAdapter = new CustomOrderAdapter(getContext(),orderArrayList,listerner);
         LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         orderList.setLayoutManager(layoutManager);
         orderList.setItemAnimator(new DefaultItemAnimator());
@@ -75,13 +106,37 @@ public class Order extends Fragment {
             priceList = bundle.getIntegerArrayList("price");
             for(int iterate=0;iterate<ItemId.size();iterate++){
                 orderArrayList.add(new Menu(true,false, ItemId.get(iterate),"","",NameList.get(iterate),quantityList.get(iterate).toString(),priceList.get(iterate).toString()));
+                total=total+(priceList.get(iterate)*quantityList.get(iterate));
             }
-            Log.d("mji",orderArrayList.get(0).getProduct());
+            bill.setText(String.valueOf(total));
+            fees.setText(String.valueOf(fee));
+            total_amount=total+fee;
+            totalbill.setText(String.valueOf(total_amount));
+            //Log.d("mji",orderArrayList.get(0).getProduct());
             mAdapter.setOrder(orderArrayList);
-
         }
+        if (orderArrayList.isEmpty()){
+            noOrder.setVisibility(View.VISIBLE);
+            Order.setVisibility(View.GONE);
+        }else {
+            noOrder.setVisibility(View.GONE);
+            Order.setVisibility(View.VISIBLE);
+        }
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                orderArrayList.clear();
+                ItemId.clear();
+                quantityList.clear();
+                priceList.clear();
+                NameList.clear();
+                dbHelper.DeleteAll_Order();
+                noOrder.setVisibility(View.VISIBLE);
+                Order.setVisibility(View.GONE);
+            }
+        });
         Log.d("mji","bundle not pass");
-
+        dbHelper.close();
     }
 
 //    // TODO: Rename method, update argument and hook method into UI event

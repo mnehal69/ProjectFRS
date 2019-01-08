@@ -1,5 +1,5 @@
 <resources>
-    <string name="website">http://127.0.0.1:8081/FRS/</string>
+    <string name="website">http://192.168.10.3:8081/FRS/</string>
     <string name="app_name">Mukbang</string>
     <string name="facebook_login_text">Login With Facebook</string>
     <string name="continue_with_email">Continue With Email</string>
@@ -73,4 +73,10 @@
     <string name="remove">remove</string>
     <string name="add">add</string>
     <string name="no_menu">No Menu</string>
+    <string name="checkout">Checkout:</string>
+    <string name="total_bill">Total Bill:</string>
+    <string name="_1050_pkr">1050 PKR</string>
+    <string name="total">Total:</string>
+    <string name="delivery_fee">Delivery Fee:</string>
+    <string name="_200_pkr">200 PKR</string>
 </resources>

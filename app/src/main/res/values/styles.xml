@@ -12,8 +12,7 @@
 
     <style name="SplashTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:windowBackground">@drawable/launcher</item>
-        <item name="colorPrimary">@color/Background</item>
-        <item name="colorPrimaryDark">@color/Background</item>
+        <item name="android:statusBarColor">@color/SplashBackground</item>
     </style>
 
     <style name="TextAppearance.App.TextInputLayout" parent="@android:style/TextAppearance">
@@ -26,6 +25,6 @@
     <!--</style>-->
 
     <style name="ToggleSwitchTheme" parent="ThemeOverlay.AppCompat.Light">
-        <item name="colorAccent">@color/Card</item>
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
 </resources>

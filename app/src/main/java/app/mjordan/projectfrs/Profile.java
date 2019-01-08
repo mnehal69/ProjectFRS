@@ -1,12 +1,9 @@
 package app.mjordan.projectfrs;
 
-import android.app.ActionBar;
+
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -14,22 +11,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.Toast;
-
-
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -52,7 +44,7 @@ import retrofit2.Callback;
  * {@link //Profile.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class Profile extends Fragment implements View.OnClickListener {
+public class Profile extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     Button SignIn;
     private OnFragmentInteractionListener mListener;
     MKB_DB dbHelper;
@@ -64,9 +56,10 @@ public class Profile extends Fragment implements View.OnClickListener {
     String server_url;
     String mediaPath,json;
     User userData,editData;
+    Switch ThemeSwitch;
     ListView listView;
     ArrayList<ProfileList> profileListArrayList;
-    int ListType=0;
+    int ListType=0,night;
     CustomProfileAdapter customProfileAdapter;
     Boolean show=false;
     public Profile() {
@@ -105,6 +98,7 @@ public class Profile extends Fragment implements View.OnClickListener {
         Done=(LinearLayout)view.findViewById(R.id.done);
         userPic=(CircleImageView) view.findViewById(R.id.profile_image);
         listView=(ListView)view.findViewById(R.id.list);
+        ThemeSwitch=(Switch)view.findViewById(R.id.ThemeSet);
         helperClass=new HelperClass(getContext());
         server_url=getResources().getString(R.string.website)+"user/upload_image.php";
         Bundle bundle=getArguments();
@@ -112,6 +106,12 @@ public class Profile extends Fragment implements View.OnClickListener {
             type=bundle.getString("Type");
             json=bundle.getString("json");
             String listType=bundle.getString("ListType");
+            night=bundle.getInt("Toggle");
+            if(night==1){
+                ThemeSwitch.setChecked(true);
+            }else{
+                ThemeSwitch.setChecked(false);
+            }
             if(listType.equals("Edit")){
                 ListType=2;
                 show=true;
@@ -121,7 +121,7 @@ public class Profile extends Fragment implements View.OnClickListener {
             //Log.d("zxc", String.valueOf(ListType));
             if(json!=null){
                 FragmentTransaction ft= getActivity().getSupportFragmentManager().beginTransaction();
-                Menu.setOnClickListener(new OnMenuProfileOverflowListerner(getContext(),type,listType,json,ft));
+                Menu.setOnClickListener(new OnMenuProfileOverflowListerner(getContext(),type,listType,json,ft,night));
                 profileListArrayList=new ArrayList<>();
                 Gson gson = new Gson();
                 userData = gson.fromJson(json, User.class);
@@ -154,6 +154,7 @@ public class Profile extends Fragment implements View.OnClickListener {
         Done.setOnClickListener(this);
         SignIn.setOnClickListener(this);
         userPic.setOnClickListener(this);
+        ThemeSwitch.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -254,6 +255,11 @@ public class Profile extends Fragment implements View.OnClickListener {
         mListener = null;
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            mListener.Theme(b);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -267,5 +273,6 @@ public class Profile extends Fragment implements View.OnClickListener {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void Done(User user, User userData);
+        void Theme(Boolean Isnight);
     }
 }

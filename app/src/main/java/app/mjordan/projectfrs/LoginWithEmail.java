@@ -131,6 +131,7 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
                                          main.putExtra("UserData",User.toString());
                                          main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                          startActivity(main);
+                                         dbHelper.close();
                                      }
 
                                  } else {

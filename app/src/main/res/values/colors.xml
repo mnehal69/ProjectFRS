@@ -18,4 +18,6 @@
     <color name="Divider">#1FFFFFFF</color>
     <color name="Card">#009688</color>
     <color name="FacebookBackground">#2b4170</color>
+    <color name="SplashBackground">#303030</color>
+
 </resources>

@@ -26,19 +26,62 @@
             android:text="@string/dummy_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <TextView
-            android:visibility="visible"
-            android:id="@+id/Des"
-            android:textColor="@color/PrimaryText"
-            android:textSize="14sp"
-            android:text="@string/dummy_name"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/AddBtn"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/tab"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_add_black_24dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:contentDescription="@string/add" />
+                <LinearLayout
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:background="@color/PrimaryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/Quantity"
+                        android:textSize="25sp"
+                        android:gravity="center"
+                        android:textColor="@color/Background"
+                        android:text="@string/_0"
+                        android:backgroundTint="@color/Transparent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <ImageView
+                    android:id="@+id/RemoveBtn"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/tab"
+                    android:backgroundTint="@color/ErrorDialog"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_remove_black_24dp"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:contentDescription="@string/remove" />
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/centerline"
         android:layout_gravity="center"
-        android:background="@color/Card"
+        android:background="@color/colorPrimary"
         android:orientation="vertical"
         android:layout_width="2dp"
         android:layout_height="50sp"/>
