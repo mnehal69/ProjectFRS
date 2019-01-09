@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,6 +29,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -48,8 +50,7 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
     Button SignIn;
     private OnFragmentInteractionListener mListener;
     MKB_DB dbHelper;
-    LinearLayout offLogin,Menu,Done;
-    RelativeLayout onLogin;
+    LinearLayout offLogin,Menu,Done,onLogin;
     String type="Guest";
     CircleImageView userPic;
     HelperClass helperClass;
@@ -78,7 +79,7 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
@@ -87,18 +88,18 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
 
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         dbHelper = new MKB_DB(getContext());
         helperClass=new HelperClass(getContext());
-        SignIn= (Button) view.findViewById(R.id.SignIn);
-        onLogin=(RelativeLayout) view.findViewById(R.id.OnLogin);
-        offLogin=(LinearLayout)view.findViewById(R.id.NotLogin);
-        Menu=(LinearLayout)view.findViewById(R.id.profile_menu);
-        Done=(LinearLayout)view.findViewById(R.id.done);
-        userPic=(CircleImageView) view.findViewById(R.id.profile_image);
-        listView=(ListView)view.findViewById(R.id.list);
-        ThemeSwitch=(Switch)view.findViewById(R.id.ThemeSet);
+        SignIn= view.findViewById(R.id.SignIn);
+        onLogin= view.findViewById(R.id.OnLogin);
+        offLogin= view.findViewById(R.id.NotLogin);
+        Menu= view.findViewById(R.id.profile_menu);
+        Done= view.findViewById(R.id.done);
+        userPic= view.findViewById(R.id.profile_image);
+        listView= view.findViewById(R.id.list);
+        ThemeSwitch= view.findViewById(R.id.ThemeSet);
         helperClass=new HelperClass(getContext());
         server_url=getResources().getString(R.string.website)+"user/upload_image.php";
         Bundle bundle=getArguments();
@@ -112,7 +113,7 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
             }else{
                 ThemeSwitch.setChecked(false);
             }
-            if(listType.equals("Edit")){
+            if(listType != null && listType.equals("Edit")){
                 ListType=2;
                 show=true;
             }else{
@@ -120,7 +121,7 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
             }
             //Log.d("zxc", String.valueOf(ListType));
             if(json!=null){
-                FragmentTransaction ft= getActivity().getSupportFragmentManager().beginTransaction();
+                FragmentTransaction ft= Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
                 Menu.setOnClickListener(new OnMenuProfileOverflowListerner(getContext(),type,listType,json,ft,night));
                 profileListArrayList=new ArrayList<>();
                 Gson gson = new Gson();
@@ -151,6 +152,7 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
         }else{
             Done.setVisibility(View.GONE);
         }
+        helperClass.setListViewHeightBasedOnChildren(listView);
         Done.setOnClickListener(this);
         SignIn.setOnClickListener(this);
         userPic.setOnClickListener(this);
@@ -161,6 +163,7 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.profile_image:
+                assert getFragmentManager() != null;
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 Fragment prev = getFragmentManager().findFragmentByTag("dialog");
                 if (prev != null) {
@@ -184,7 +187,7 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
     void setImage( Uri uri){
         if(uri!=null) {
             String[] filePathColumn={MediaStore.Images.Media.DATA};
-            Cursor cursor= (getActivity()).getContentResolver().query(uri,filePathColumn,null,null,null);
+            Cursor cursor= (Objects.requireNonNull(getActivity())).getContentResolver().query(uri,filePathColumn,null,null,null);
             assert cursor!=null;
             cursor.moveToFirst();
             int columnIndex=cursor.getColumnIndex(filePathColumn[0]);
@@ -200,7 +203,7 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
 
     // Uploading Image/Video
     private void uploadFile() {
-        final FragmentManager fm = getActivity().getSupportFragmentManager();
+        final FragmentManager fm = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
         helperClass.load_Fragment(true,fm);
 
         // Map is used to multipart the file using okhttp3.RequestBody
@@ -223,16 +226,12 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
                         Toast.makeText(getContext(), serverResponse.getMessage(),Toast.LENGTH_SHORT).show();
                         userPic.setImageDrawable(getResources().getDrawable(R.drawable.bartender));
                     }
-                } else {
-                    assert serverResponse != null;
-                    Log.d("zxc", serverResponse.toString());
                 }
                 helperClass.load_Fragment(false,fm);
             }
 
             @Override
             public void onFailure(retrofit2.Call call, Throwable t) {
-                Log.d("zxc error",t.getMessage().toString());
                 helperClass.load_Fragment(false,fm);
             }
         });

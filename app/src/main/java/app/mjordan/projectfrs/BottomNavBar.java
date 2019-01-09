@@ -1,5 +1,7 @@
 package app.mjordan.projectfrs;
 
+import android.content.res.Configuration;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -14,11 +16,12 @@ import android.widget.LinearLayout;
 public class BottomNavBar extends Fragment implements View.OnClickListener {
     OnBottomNavListerner mListener;
     LinearLayout tab1,tab2,tab3;
+    boolean portrait=true;
     public BottomNavBar(){}
 
 
     interface OnBottomNavListerner{
-        public void fragment(int n );
+        void fragment(int n );
     }
 
     @Override
@@ -33,14 +36,22 @@ public class BottomNavBar extends Fragment implements View.OnClickListener {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.bottom_nav,container,false);
-        tab1=(LinearLayout) view.findViewById(R.id.Tab_1);
-        tab2=(LinearLayout) view.findViewById(R.id.Tab_2);
-        tab3=(LinearLayout) view.findViewById(R.id.Tab_3);
-        tab1.setOnClickListener(this);
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            portrait=true;
+            tab1= view.findViewById(R.id.Tab_1);
+            tab1.setOnClickListener(this);
+        }else {
+            portrait = false;
+        }
+
+        tab2= view.findViewById(R.id.Tab_2);
+        tab3=view.findViewById(R.id.Tab_3);
         tab2.setOnClickListener(this);
         tab3.setOnClickListener(this);
+
         return view;
     }
 
@@ -51,7 +62,9 @@ public class BottomNavBar extends Fragment implements View.OnClickListener {
     }
 
     public void TabChanged(int i) {
-        Tab_Icon(tab1,R.drawable.money_silver);
+        if (portrait) {
+            Tab_Icon(tab1, R.drawable.money_silver);
+        }
         Tab_Icon(tab2,R.drawable.pizza_silver);
         Tab_Icon(tab3,R.drawable.face_silver);
         switch (i){
@@ -70,7 +83,9 @@ public class BottomNavBar extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        Tab_Icon(tab1,R.drawable.money_silver);
+        if (portrait) {
+            Tab_Icon(tab1, R.drawable.money_silver);
+        }
         Tab_Icon(tab2,R.drawable.pizza_silver);
         Tab_Icon(tab3,R.drawable.face_silver);
         switch (view.getId()){

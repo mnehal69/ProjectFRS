@@ -44,7 +44,7 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
-    <RelativeLayout
+    <LinearLayout
         android:visibility="gone"
         android:id="@+id/OnLogin"
         android:layout_width="match_parent"
@@ -110,7 +110,6 @@
         <LinearLayout
             android:layout_marginTop="40dp"
             android:id="@+id/SettingImage"
-            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -129,11 +128,10 @@
         <!--Detail row -->
         <ListView
             android:divider="@color/PrimaryText"
-            android:layout_below="@+id/SettingImage"
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-    </RelativeLayout>
+    </LinearLayout>
 
 
     <!--SWITCH TOGGLE-->

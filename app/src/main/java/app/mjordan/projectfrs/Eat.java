@@ -30,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -43,10 +44,11 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 // */
 public class Eat extends Fragment {
     private OnFragmentInteractionListener mListener;
-    private RecyclerView recyclerView;
+    private RecyclerView PopularrecyclerView,ListRecycleView;
     private ListView list;
     private ArrayList<Rest_List> rest_list = new ArrayList<>();
     private PopularAdapter mAdapter;
+    private CustomListAdapter mListAdapter;
     private Bundle bundle;
     private String res;
     private int MENU_ACTIVITY_ORDER=2;
@@ -56,7 +58,7 @@ public class Eat extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         bundle=getArguments();
         if(bundle!=null) {
@@ -97,19 +99,19 @@ public class Eat extends Fragment {
             }
         };
 
-            recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-            mAdapter = new PopularAdapter(listener,rest_list);
-            LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-            recyclerView.setLayoutManager(layoutManager);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-            recyclerView.setAdapter(mAdapter);
-            final FragmentTransaction ft= getFragmentManager().beginTransaction();
-            Restaurent_List_Fragment list =new Restaurent_List_Fragment();
-           Bundle bundle=new Bundle();
-          bundle.putString("Res",res);
-           list.setArguments(bundle);
-            ft.add(R.id.ListFragment,list);
-            ft.commit();
+        PopularrecyclerView= view.findViewById(R.id.recycler_view);
+        mAdapter = new PopularAdapter(listener,rest_list);
+        LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        PopularrecyclerView.setLayoutManager(layoutManager);
+        PopularrecyclerView.setItemAnimator(new DefaultItemAnimator());
+        PopularrecyclerView.setAdapter(mAdapter);
+
+        ListRecycleView= view.findViewById(R.id.ListRecycleView);
+        mListAdapter = new CustomListAdapter(listener,rest_list);
+        LinearLayoutManager ListlayoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        ListRecycleView.setLayoutManager(ListlayoutManager);
+        ListRecycleView.setItemAnimator(new DefaultItemAnimator());
+        ListRecycleView.setAdapter(mListAdapter);
     }
 
 
@@ -117,10 +119,10 @@ public class Eat extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==MENU_ACTIVITY_ORDER && resultCode==RESULT_OK){
             if(data!=null){
-                ArrayList<String> id= (ArrayList<String>)data.getStringArrayListExtra("id");
-                ArrayList<Integer> item=(ArrayList<Integer>)data.getExtras().getIntegerArrayList("item");
-                ArrayList<String> name=(ArrayList<String>)data.getExtras().getStringArrayList("name");
-                ArrayList<Integer> price=(ArrayList<Integer>)data.getExtras().getIntegerArrayList("price");
+                ArrayList<String> id= data.getStringArrayListExtra("id");
+                ArrayList<Integer> item= Objects.requireNonNull(data.getExtras()).getIntegerArrayList("item");
+                ArrayList<String> name= data.getExtras().getStringArrayList("name");
+                ArrayList<Integer> price= data.getExtras().getIntegerArrayList("price");
                 mListener.BottomNavChangeTav(1);
                 mListener.OrderFragment(id,name,item,price);
             }

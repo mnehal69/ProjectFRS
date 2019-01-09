@@ -28,7 +28,7 @@
         android:textSize="20sp"
         />
     <LinearLayout
-        android:layout_marginTop="20sp"
+        android:layout_marginTop="0sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -43,6 +43,7 @@
         android:textColorHint="@color/colorPrimaryDark"
         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
         <EditText
+           android:hint="@string/empty"
             android:inputType="textEmailAddress"
             android:backgroundTint="@color/colorPrimaryDark"
             android:textSize="15sp"
@@ -67,6 +68,7 @@
         android:textColorHint="@color/colorPrimaryDark"
         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
         <EditText
+            android:hint="@string/empty"
             android:inputType="textPassword"
             android:paddingStart="20sp"
             android:paddingEnd="0sp"
@@ -84,7 +86,7 @@
         <Button
             android:id="@+id/LoginBtn"
             android:background="@drawable/login_button"
-            android:layout_marginTop="50sp"
+            android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"

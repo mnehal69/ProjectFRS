@@ -58,7 +58,8 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_space"
                     android:layout_width="200dp"
-                    android:layout_height="200dp" />
+                    android:layout_height="200dp"
+                    android:contentDescription="@string/no_menu" />
                 <TextView
                     android:fontFamily="serif-monospace"
                     android:gravity="center"

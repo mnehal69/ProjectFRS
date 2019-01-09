@@ -7,19 +7,15 @@
     tools:context=".Order">
 
     <LinearLayout
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_gravity="center"
         android:id="@+id/NoOrder"
         android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <ImageView
-            android:layout_width="150sp"
-            android:layout_height="150sp"
-            android:src="@drawable/empty_1"
-            android:contentDescription="@string/online_order" />
         <TextView
+            android:drawableTop="@drawable/empty_1"
             android:fontFamily="serif-monospace"
             android:textColor="@color/PrimaryText"
             android:textSize="20sp"
@@ -34,7 +30,7 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_marginBottom="30dp"
         android:id="@+id/Order"
-        android:visibility="visible"
+        android:visibility="gone"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"

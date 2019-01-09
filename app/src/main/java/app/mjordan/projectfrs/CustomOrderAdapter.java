@@ -39,13 +39,13 @@ public class CustomOrderAdapter extends RecyclerView.Adapter<CustomOrderAdapter.
         ImageView add,remove;
         Card(View view) {
             super(view);
-            item=(LinearLayout)view.findViewById(R.id.card_menu);
-            title = (TextView) view.findViewById(R.id.title);
-            price = (TextView) view.findViewById(R.id.Price);
-            quantity = (TextView) view.findViewById(R.id.Quantity);
-            line=(LinearLayout)view.findViewById(R.id.centerline);
-            add=(ImageView)view.findViewById(R.id.AddBtn);
-            remove=(ImageView)view.findViewById(R.id.RemoveBtn);
+            item= view.findViewById(R.id.card_menu);
+            title = view.findViewById(R.id.title);
+            price = view.findViewById(R.id.Price);
+            quantity = view.findViewById(R.id.Quantity);
+            line= view.findViewById(R.id.centerline);
+            add= view.findViewById(R.id.AddBtn);
+            remove= view.findViewById(R.id.RemoveBtn);
         }
     }
 
@@ -61,12 +61,18 @@ public class CustomOrderAdapter extends RecyclerView.Adapter<CustomOrderAdapter.
     @Override
     public void onBindViewHolder(@NonNull Card holder, int position) {
         final Menu order_of_menu=order.get(position);
-        final Card card_holder = (Card)holder;
+        final Card card_holder = holder;
         card_holder.title.setText(order_of_menu.getProduct());
         String quantityString=order_of_menu.getDes();
         card_holder.quantity.setText(quantityString);
         String price=order_of_menu.getDes()+" X  Rs"+order_of_menu.getPrice();
         card_holder.price.setText(price);
+
+        ViewGroup.LayoutParams params = card_holder.line.getLayoutParams();
+        // Changes the height and width to the specified *pixels*
+        params.height = card_holder.quantity.getMaxHeight();
+        card_holder.line.setLayoutParams(params);
+
         card_holder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

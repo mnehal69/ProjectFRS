@@ -14,18 +14,23 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.Objects;
 
 
 public class HelperClass {
     private Context mContext;
     private Fragment prev;
     private LoadingDialog loadingDialog;
-    public static final String MyPREFERENCES = "Theme" ;
-    SharedPreferences sharedpreferences;
+    private static final String MyPREFERENCES = "Theme" ;
+
     HelperClass(Context context){
         this.mContext=context;
         prev = ((Activity)mContext).getFragmentManager().findFragmentByTag("loading_dialog");
@@ -34,7 +39,7 @@ public class HelperClass {
 
     public void Reload(Activity activity,Boolean Isnight,String type,String json)
     {
-        sharedpreferences = activity.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedpreferences = activity.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         Window window = activity.getWindow();
         if (Isnight){
             window.setStatusBarColor(activity.getResources().getColor(R.color.SplashBackground));
@@ -49,6 +54,31 @@ public class HelperClass {
         activity.startActivity(main);
     }
 
+    public void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+
+        int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
+
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            if (listItem instanceof ViewGroup) {
+                listItem.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            }
+
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+    }
+
+
     void Input_Error( EditText editText, String error, int id) {
         /*
          * THIS CHECK IF BOTH THE FIELD IS NOT EMPTY
@@ -60,20 +90,16 @@ public class HelperClass {
         editText.getBackground().setColorFilter(ContextCompat.getColor(mContext, id), PorterDuff.Mode.SRC_ATOP);
     }
     boolean isDeviceSupportCamera() {
-        if (mContext.getPackageManager().hasSystemFeature(
-                PackageManager.FEATURE_CAMERA)) {
-            // this device has a camera
-            return true;
-        } else {
-            // no camera on this device
-            return false;
-        }
+        // this device has a camera
+// no camera on this device
+        return mContext.getPackageManager().hasSystemFeature(
+                PackageManager.FEATURE_CAMERA);
     }
 
     boolean CheckEmpty(EditText editText){
         String editval=editText.getText().toString().trim();
         TextInputLayout layout= (TextInputLayout) editText.getParentForAccessibility();
-        String specific_field=layout.getHint().toString();
+        String specific_field= Objects.requireNonNull(layout.getHint()).toString();
         //Log.d("zxc hint", String.valueOf(layout.getHint()));
         if(editval.equals("")){
             Input_Error(editText,specific_field+" is empty",R.color.ErrorDialog);

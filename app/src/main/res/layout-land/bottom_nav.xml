@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/Background"
+    android:baselineAligned="false">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="5sp"
+        android:clickable="true"
+        android:id="@+id/Tab_2"
+        android:focusable="true">
+        <ImageView
+            android:src="@drawable/pizza_silver"
+            android:layout_width="25sp"
+            android:layout_height="25sp"
+            android:contentDescription="@string/eat"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="5sp"
+        android:clickable="true"
+        android:id="@+id/Tab_3"
+        android:focusable="true">
+        <ImageView
+            android:background="@color/Transparent"
+            android:src="@drawable/face"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:contentDescription="@string/profile"
+            android:focusable="true" />
+    </LinearLayout>
+    </LinearLayout>

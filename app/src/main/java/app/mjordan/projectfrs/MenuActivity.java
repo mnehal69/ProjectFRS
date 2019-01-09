@@ -1,6 +1,7 @@
 package app.mjordan.projectfrs;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +34,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import ru.nikartm.support.ImageBadgeView;
 
@@ -51,14 +53,25 @@ public class MenuActivity extends AppCompatActivity implements Counter.OnFragmen
     private ArrayList<String> Namelist=new ArrayList<>();
     private ArrayList<Integer> itemlist=new ArrayList<>();
     private ArrayList<Integer> Pricelist=new ArrayList<>();
-
+    boolean portrait=true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
         ft.add(R.id.loading_menu_fragment,new LoadingMain());
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            portrait = false;
+            Order order=new Order();
+            ft.replace(R.id.MenuOrderFrag,order);
+        }else {
+            portrait=true;
+        }
         ft.commit();
+
+
+
         dbHelper=new MKB_DB(this);
         DialogFragmentInterface listener =new DialogFragmentInterface() {
             @Override
@@ -84,20 +97,20 @@ public class MenuActivity extends AppCompatActivity implements Counter.OnFragmen
         helperClass=new HelperClass(this);
 
         url=getResources().getString(R.string.website)+"res/menu_list.php";
-        id=getIntent().getExtras().getString("ID");
+        id= Objects.requireNonNull(getIntent().getExtras()).getString("ID");
         logo=getIntent().getExtras().getString("Logo");
         background=getIntent().getExtras().getString("Background");
 
-        noMenu=(LinearLayout)findViewById(R.id.NoMenu);
-        back=(ImageView) findViewById(R.id.back);
-        logoimg=(ImageView)findViewById(R.id.rest_Logo);
-        backgroundimg=(ImageView)findViewById(R.id.rest_background);
-        cart=(ImageBadgeView)findViewById(R.id.cart);
+        noMenu= findViewById(R.id.NoMenu);
+        back= findViewById(R.id.back);
+        logoimg= findViewById(R.id.rest_Logo);
+        backgroundimg= findViewById(R.id.rest_background);
+        cart= findViewById(R.id.cart);
 
         Picasso.get().load(logo).into(logoimg);
         Picasso.get().load(background).into(backgroundimg);
 
-        menuList=(RecyclerView)findViewById(R.id.menu_list);
+        menuList= findViewById(R.id.menu_list);
         mAdapter = new MenuListAdapter(this,menuArrayList,cart,listener);
         LinearLayoutManager layoutManager= new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         menuList.setLayoutManager(layoutManager);
@@ -110,25 +123,39 @@ public class MenuActivity extends AppCompatActivity implements Counter.OnFragmen
         cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle args = new Bundle();
-                Intent intent=new Intent(getBaseContext(),MainActivity.class);
-                intent.putExtra("name",Namelist);
-                intent.putExtra("id",IDList);
-                intent.putExtra("item",itemlist);
-                intent.putExtra("price",Pricelist);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ArrayList<Menu> orderArrayList=new ArrayList<>();
-                        for(int iterate=0;iterate<IDList.size();iterate++){
-                            orderArrayList.add(new Menu(true,false, IDList.get(iterate),"","",Namelist.get(iterate),itemlist.get(iterate).toString(),Pricelist.get(iterate).toString()));
+                if(portrait) {
+                    Bundle args = new Bundle();
+                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                    intent.putExtra("name", Namelist);
+                    intent.putExtra("id", IDList);
+                    intent.putExtra("item", itemlist);
+                    intent.putExtra("price", Pricelist);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ArrayList<Menu> orderArrayList = new ArrayList<>();
+                            for (int iterate = 0; iterate < IDList.size(); iterate++) {
+                                orderArrayList.add(new Menu(true, false, IDList.get(iterate), "", "", Namelist.get(iterate), itemlist.get(iterate).toString(), Pricelist.get(iterate).toString()));
+                            }
+                            dbHelper.Insert_Order(orderArrayList);
                         }
-                        dbHelper.Insert_Order(orderArrayList);
-                    }
-                }).start();
+                    }).start();
 
-                setResult(RESULT_OK,intent);
-                finish();//finishing activity
+                    setResult(RESULT_OK, intent);
+                    finish();//finishing activity
+                }else{
+                    FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
+                    Order order=new Order();
+                    Bundle bundle=new Bundle();
+                    bundle.putStringArrayList("Id",IDList);
+                    bundle.putIntegerArrayList("item",itemlist);
+                    bundle.putStringArrayList("name",Namelist);
+                    bundle.putIntegerArrayList("price",Pricelist);
+                    order.setArguments(bundle);
+                    ft.replace(R.id.MenuOrderFrag,order);
+                    ft.commit();
+                    cart.setBadgeValue(0);
+                }
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
@@ -200,8 +227,6 @@ public class MenuActivity extends AppCompatActivity implements Counter.OnFragmen
             };
             // Add the request to the RequestQueue.
             queue.add(stringRequest);
-        }else{
-
         }
     }
 

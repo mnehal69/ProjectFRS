@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Login"
+    android:background="@mipmap/back_pic"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:background="#3b000000"
+        android:orientation="vertical">
+        <ImageView
+            android:src="@drawable/logo_color_crop"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:contentDescription="@string/logoimg" />
+        <TextView
+            android:fontFamily="cursive"
+            android:textSize="20sp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#fff"
+            android:text="@string/be_foodie_and_do_mukbang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="1.2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@color/BackgroundTransparent">
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <Button
+            android:padding="20dp"
+            android:layout_marginEnd="20dp"
+            android:drawablePadding="10sp"
+            android:drawableStart="@drawable/facebook_logo"
+            android:id="@+id/facebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:textColor="#fff"
+            android:text="@string/facebook_login_text"
+            android:textSize="12sp"
+            android:textStyle="bold"/>
+
+        <Button
+            android:padding="20dp"
+            android:drawableStart="@drawable/ic_email_black_24dp"
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:textColor="#fff"
+            android:drawablePadding="10sp"
+            android:textStyle="bold"
+            android:text="@string/continue_with_email"
+            android:backgroundTint="#e8696969"
+            android:textSize="12.5sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="15dp">
+            <Button
+                android:id="@+id/Guest"
+                android:background="@drawable/dashed_line"
+                android:textSize="12sp"
+                android:textColor="#fff"
+                android:text="@string/why_not_login_later"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
