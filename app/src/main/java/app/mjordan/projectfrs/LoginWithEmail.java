@@ -24,6 +24,8 @@ import com.android.volley.VolleyError;
 
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.CallbackManager;
+import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,8 +39,6 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
     Button ForgetBtn,RegisterBtn,LoginBtn;
     String server_url;
     TextInputLayout userEmailLayout,PassLayout;
-    Fragment prev;
-    LoadingDialog loadingDialog;
     MKB_DB dbHelper;
     HelperClass helperClass;
     @Override
@@ -52,14 +52,14 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(this,R.color.Background));
 
-        username = (EditText) findViewById(R.id.UName);
-        password=(EditText) findViewById(R.id.PName);
-        closeBtn = (ImageButton) findViewById(R.id.close_btn);
-        ForgetBtn=(Button)findViewById(R.id.ForgetPass);
-        RegisterBtn=(Button) findViewById(R.id.RegisterLogin);
-        LoginBtn=(Button)findViewById(R.id.LoginBtn);
-        userEmailLayout=(TextInputLayout) findViewById(R.id.UserEmailLayout);
-        PassLayout=(TextInputLayout) findViewById(R.id.PassLayout);
+        username = findViewById(R.id.UName);
+        password= findViewById(R.id.PName);
+        closeBtn = findViewById(R.id.close_btn);
+        ForgetBtn= findViewById(R.id.ForgetPass);
+        RegisterBtn= findViewById(R.id.RegisterLogin);
+        LoginBtn= findViewById(R.id.LoginBtn);
+        userEmailLayout= findViewById(R.id.UserEmailLayout);
+        PassLayout= findViewById(R.id.PassLayout);
         /*username.requestFocus();*/
         closeBtn.setOnClickListener(this);
         RegisterBtn.setOnClickListener(this);
@@ -128,6 +128,7 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
                                          dbHelper.Insert_IsLogged(User.getString("ID"));
                                          Intent main = new Intent(LoginWithEmail.this, MainActivity.class);
                                          main.putExtra("Type","User");
+                                         main.putExtra("LoginUsing","Email");
                                          main.putExtra("UserData",User.toString());
                                          main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                          startActivity(main);

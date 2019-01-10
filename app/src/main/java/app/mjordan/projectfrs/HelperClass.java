@@ -37,7 +37,7 @@ public class HelperClass {
         loadingDialog = new LoadingDialog();
     }
 
-    public void Reload(Activity activity,Boolean Isnight,String type,String json)
+    public void Reload(Activity activity,Boolean Isnight,String type,String json,String loginUsing)
     {
         SharedPreferences sharedpreferences = activity.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         Window window = activity.getWindow();
@@ -51,6 +51,7 @@ public class HelperClass {
         Intent main = new Intent(activity, activity.getClass());
         main.putExtra("Type",type);
         main.putExtra("UserData",json);
+        main.putExtra("LoginUsing",loginUsing);
         activity.startActivity(main);
     }
 

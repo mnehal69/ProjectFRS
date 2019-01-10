@@ -10,6 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
+
 import app.mjordan.projectfrs.R;
 
 public class OnMenuProfileOverflowListerner implements View.OnClickListener {
@@ -20,7 +23,10 @@ public class OnMenuProfileOverflowListerner implements View.OnClickListener {
     Activity activity;
     private String type,json,ListType;
     private int night;
-    OnMenuProfileOverflowListerner(Context c,String type,String list,String json, FragmentTransaction ft,int night){
+    private boolean isLoggedIn;
+    private String loginUsing;
+
+    OnMenuProfileOverflowListerner(Context c,String type,String list,String json,String loginUsing, FragmentTransaction ft,int night){
         this.mContext=c;
         dbHelper=new MKB_DB(c);
         this.ft=ft;
@@ -28,6 +34,9 @@ public class OnMenuProfileOverflowListerner implements View.OnClickListener {
         this.json=json;
         this.ListType=list;
         this.night=night;
+        this.loginUsing=loginUsing;
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+       isLoggedIn = accessToken != null && !accessToken.isExpired();
     }
 
     @Override
@@ -45,15 +54,25 @@ public class OnMenuProfileOverflowListerner implements View.OnClickListener {
                         bundle.putString("json",json);
                         bundle.putString("ListType",list);
                         bundle.putInt("Toggle",night);
+                        bundle.putString("LoginUsing",loginUsing);
                         profile.setArguments(bundle);
                         ft.replace(R.id.TabFragment,profile);
                         ft.commit();
                         return true;
                     case R.id.LogOut:
-                        dbHelper.DeleteAll_IsLogged();
-                        Intent login=new Intent(getmContext(),Login.class);
-                        login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        getmContext().startActivity(login);
+                        if(isLoggedIn){
+                           LoginManager.getInstance().logOut();
+
+                        }else {
+                            dbHelper.DeleteAll_IsLogged();
+                        }
+                        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+                        isLoggedIn = accessToken != null && !accessToken.isExpired();
+                        if(!isLoggedIn) {
+                            Intent login = new Intent(getmContext(), Login.class);
+                            login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            getmContext().startActivity(login);
+                        }
                         return true;
                     case R.id.Setting:
                         return true;
@@ -71,7 +90,7 @@ public class OnMenuProfileOverflowListerner implements View.OnClickListener {
         }
     }
 
-    public Context getmContext() {
+    private Context getmContext() {
         return mContext;
     }
 

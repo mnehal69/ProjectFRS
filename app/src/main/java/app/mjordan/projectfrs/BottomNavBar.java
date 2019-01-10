@@ -38,6 +38,11 @@ public class BottomNavBar extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.bottom_nav,container,false);
+        tab2= view.findViewById(R.id.Tab_2);
+        tab3=view.findViewById(R.id.Tab_3);
+        tab2.setOnClickListener(this);
+        tab3.setOnClickListener(this);
+
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             portrait=true;
@@ -47,10 +52,7 @@ public class BottomNavBar extends Fragment implements View.OnClickListener {
             portrait = false;
         }
 
-        tab2= view.findViewById(R.id.Tab_2);
-        tab3=view.findViewById(R.id.Tab_3);
-        tab2.setOnClickListener(this);
-        tab3.setOnClickListener(this);
+
 
         return view;
     }

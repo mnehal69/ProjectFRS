@@ -63,6 +63,7 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
     int ListType=0,night;
     CustomProfileAdapter customProfileAdapter;
     Boolean show=false;
+    String loginUsing,imgPath;
     public Profile() {
         // Required empty public constructor
 
@@ -82,6 +83,7 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
@@ -102,10 +104,13 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
         ThemeSwitch= view.findViewById(R.id.ThemeSet);
         helperClass=new HelperClass(getContext());
         server_url=getResources().getString(R.string.website)+"user/upload_image.php";
+
         Bundle bundle=getArguments();
         if(bundle!=null){
             type=bundle.getString("Type");
             json=bundle.getString("json");
+            loginUsing=bundle.getString("LoginUsing");
+            Log.d("LoginUsing",loginUsing);
             String listType=bundle.getString("ListType");
             night=bundle.getInt("Toggle");
             if(night==1){
@@ -122,7 +127,7 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
             //Log.d("zxc", String.valueOf(ListType));
             if(json!=null){
                 FragmentTransaction ft= Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-                Menu.setOnClickListener(new OnMenuProfileOverflowListerner(getContext(),type,listType,json,ft,night));
+                Menu.setOnClickListener(new OnMenuProfileOverflowListerner(getContext(),type,listType,json,loginUsing,ft,night));
                 profileListArrayList=new ArrayList<>();
                 Gson gson = new Gson();
                 userData = gson.fromJson(json, User.class);
@@ -134,8 +139,18 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
 
                 customProfileAdapter=new CustomProfileAdapter(profileListArrayList,getContext(),editData);
                 if(userData.Avatar!=null) {
-                    Picasso.get().load(getResources().getString(R.string.website)+userData.Avatar).into(userPic);
+                    if(loginUsing.equals("FB")){
+                        imgPath=userData.Avatar;
+                    }else {
+                        imgPath=getResources().getString(R.string.website)+userData.Avatar;
+                    }
                 }
+                    Picasso.get().load(imgPath).into(userPic);
+
+                    Log.d("mb",userData.Avatar);
+                    Log.d("graph","https://graph.facebook.com/"+userData.ID+"/picture?type=large");
+
+
                 listView.setAdapter(customProfileAdapter);
             }
         }
@@ -163,15 +178,17 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.profile_image:
-                assert getFragmentManager() != null;
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-                if (prev != null) {
-                    ft.remove(prev);
+                if(loginUsing.equals("Email")) {
+                    assert getFragmentManager() != null;
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+                    if (prev != null) {
+                        ft.remove(prev);
+                    }
+                    ft.addToBackStack(null);
+                    ImageChoice dialogFragment = new ImageChoice();
+                    dialogFragment.show(ft, "dialog");
                 }
-                ft.addToBackStack(null);
-                ImageChoice dialogFragment = new ImageChoice();
-                dialogFragment.show(ft, "dialog");
                 break;
             case R.id.SignIn:
                 Intent main = new Intent(getContext(), Login.class);

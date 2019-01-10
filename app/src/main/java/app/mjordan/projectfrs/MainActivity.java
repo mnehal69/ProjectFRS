@@ -1,21 +1,16 @@
 package app.mjordan.projectfrs;
 
-import android.app.Fragment;
+
 import android.content.Context;
-import android.content.Intent;
+
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
-
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -26,26 +21,26 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBottomNavListerner,ImageChoice.OnImageChoiceListerner,Profile.OnFragmentInteractionListener,Eat.OnFragmentInteractionListener {
     MKB_DB dbHelper;
     HelperClass helperClass;
-    FragmentTransaction ft;
+
     boolean obtainList=false;
     String type,json,list,server_url,res,popular;
-    private int MENU_ACTIVITY_ORDER=2;
     SharedPreferences sharedpreferences;
     int night=0;
     ArrayList<String> ItemId=new ArrayList<>(),NameList=new ArrayList<>();
     ArrayList<Integer>quantityList=new ArrayList<>(),priceList=new ArrayList<>();
     public static final String MyPREFERENCES = "Theme" ;
+    String loginUsing;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +56,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
         dbHelper = new MKB_DB(this);
         helperClass=new HelperClass(this);
         server_url=getResources().getString(R.string.website)+"res/eat_list.php";
-        type=getIntent().getExtras().getString("Type","Guest");
+        type= Objects.requireNonNull(getIntent().getExtras()).getString("Type","Guest");
+        loginUsing=getIntent().getExtras().getString("LoginUsing","Email");
         FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
         json = getIntent().getExtras().getString("UserData",null);
         Profile profile=new Profile();
@@ -71,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
         bundle.putString("json",json);
         bundle.putString("ListType",list);
         bundle.putInt("Toggle",night);
+        bundle.putString("LoginUsing",loginUsing);
         profile.setArguments(bundle);
         ft.add(R.id.TabFragment,profile);
         ft.commit();
@@ -169,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
                 bundle.putString("json",json);
                 bundle.putString("ListType",list);
                 bundle.putInt("Toggle",night);
+                bundle.putString("LoginUsing",loginUsing);
                 profile.setArguments(bundle);
                 ft.replace(R.id.TabFragment,profile);
                 break;
@@ -185,24 +183,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
     }
 
     public boolean sameUserValue(User user,User another){
-        if(!another.Name.equals(user.Name)){
-            return false;
-        }
-        if(!another.Address.equals(user.Address)){
-            return false;
-        }
-        if(!another.Contact.equals(user.Contact)){
-            return false;
-        }
-        return true;
+        return another.Name.equals(user.Name) && another.Address.equals(user.Address) && another.Contact.equals(user.Contact);
     }
 
     @Override
     public void Done(User user, User userData) {
 
         if(!sameUserValue(user,userData)) {
-            Gson gson = new Gson();
-            //String json = gson.toJson(userData);
             update(userData);
         }else{
             FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
@@ -213,6 +200,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
             bundle.putString("json",json);
             bundle.putString("ListType",list);
             bundle.putInt("Toggle",night);
+            bundle.putString("LoginUsing",loginUsing);
             profile.setArguments(bundle);
             ft.replace(R.id.TabFragment,profile);
             ft.commit();
@@ -233,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
             editor.putBoolean("NightTheme",false);
         }
         editor.apply();
-        helperClass.Reload(this,Isnight,type,json);
+        helperClass.Reload(this,Isnight,type,json,loginUsing);
     }
 
 
@@ -271,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
                                     bundle.putString("json",json);
                                     bundle.putString("ListType",list);
                                     bundle.putInt("Toggle",night);
+                                    bundle.putString("LoginUsing",loginUsing);
                                     profile.setArguments(bundle);
                                     ft.replace(R.id.TabFragment,profile);
                                     ft.commit();
