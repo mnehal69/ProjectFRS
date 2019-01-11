@@ -29,6 +29,12 @@ public class Counter extends DialogFragment implements View.OnClickListener {
     String itemString,name;
     int total;
     boolean changed=false;
+
+    /**
+     * This DialogFragment show a counter with increase and decrease button by which
+     * the food quantity can be increased or decreased and at the same time it is showing
+     * the price of that specific item and with quantity i.e 2 X RS 300 = 600
+     */
     public Counter() {
         // Required empty public constructor
     }
@@ -70,6 +76,20 @@ public class Counter extends DialogFragment implements View.OnClickListener {
             }
     }
 
+    /**
+     * onClick function is used for three things
+     * AddBtn:
+     *      this button is increasing the quantity and at the same time total price of that item with
+     *      quantity is shown
+     *  RemoveBtn:
+     *      this button is decreasing the quantity and at the same time total price of that item with
+     *      quantity is shown
+     *  CloseBtn:
+     *      it is checking if the quantity isn't zero of the item and if it isn't
+     *      it is updating the orderList by passing as parameters to
+     *      @see OnFragmentInteractionListener'S Update Order.
+     * @param view the pressed view
+     */
     @Override
     public void onClick(View view) {
         switch (view.getId()){

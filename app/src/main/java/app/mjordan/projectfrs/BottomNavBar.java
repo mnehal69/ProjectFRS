@@ -18,6 +18,8 @@ import android.widget.LinearLayout;
  * {@link BottomNavBar.OnBottomNavListerner} interface
  * to handle interaction events.
  * This is custom bottom navigation which is used in MainActivity
+ * In Landscape orientation only two tab will be shown tab2,tab3 and
+ * In portrait orientation all tab is shown
  */
 public class BottomNavBar extends Fragment implements View.OnClickListener {
     OnBottomNavListerner mListener;
@@ -62,13 +64,23 @@ public class BottomNavBar extends Fragment implements View.OnClickListener {
         return view;
     }
 
-
+    /**
+     * Helper function to change icon of the Custom bottomNavBar
+     * @param tab the layout in which bottomNavBar
+     * @param i the tab which is selected
+     */
     public void Tab_Icon(LinearLayout tab,int i){
         ImageView imageView;
         imageView = (ImageView) tab.getChildAt(0);
         imageView.setImageDrawable(getResources().getDrawable(i));
     }
 
+    /**Manual Click
+     * TabChanged is used to manually changed BottomNavBar
+     * *NOTE* This work like a actual BottomNavigationBar, only difference is
+     * it's selected icon is colorful
+     * @param i the tab which is selected
+     */
     public void TabChanged(int i) {
         if (portrait) {
             Tab_Icon(tab1, R.drawable.money_silver);
@@ -88,6 +100,7 @@ public class BottomNavBar extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
 
     @Override
     public void onClick(View view) {

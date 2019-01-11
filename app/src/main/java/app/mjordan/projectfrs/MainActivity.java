@@ -142,12 +142,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
         switch(n){
             case 1:
                 Order order=new Order();
-                Bundle Orderbundle=new Bundle();
-                Orderbundle.putStringArrayList("Id",ItemId);
-                Orderbundle.putIntegerArrayList("item",quantityList);
-                Orderbundle.putStringArrayList("name",NameList);
-                Orderbundle.putIntegerArrayList("price",priceList);
-                order.setArguments(Orderbundle);
+                Bundle Ordering=new Bundle();
+                Ordering.putStringArrayList("Id",ItemId);
+                Ordering.putIntegerArrayList("item",quantityList);
+                Ordering.putStringArrayList("name",NameList);
+                Ordering.putIntegerArrayList("price",priceList);
+                order.setArguments(Ordering);
                 ft.replace(R.id.TabFragment,order);
                 //Log.d("zxc","CASE1");
                 break;

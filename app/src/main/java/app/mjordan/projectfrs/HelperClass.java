@@ -31,12 +31,26 @@ public class HelperClass {
     private LoadingDialog loadingDialog;
     private static final String MyPREFERENCES = "Theme" ;
 
+    /**
+     * This class is a class of function/method
+     * which are required in different activity
+     *
+     * @param context this is the context of that activity
+     */
     HelperClass(Context context){
         this.mContext=context;
         prev = ((Activity)mContext).getFragmentManager().findFragmentByTag("loading_dialog");
         loadingDialog = new LoadingDialog();
     }
 
+    /**
+     * This is alternative of Recreate() function as it wasn't working so i create my own recreate;
+     * @param activity the activity you required
+     * @param Isnight boolean value to determine if it's day or night theme
+     * @param type this is the activity parameter to pass in Intent
+     * @param json this is the activity parameter to pass in Intent
+     * @param loginUsing this is the activity parameter to pass in Intent
+     */
     public void Reload(Activity activity,Boolean Isnight,String type,String json,String loginUsing)
     {
         SharedPreferences sharedpreferences = activity.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -55,6 +69,11 @@ public class HelperClass {
         activity.startActivity(main);
     }
 
+    /**
+     * This method adjust the listview in Landscape screen which is in
+     * Scroll View
+     * @param listView the listview which u need to adjust
+     */
     public void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
@@ -79,24 +98,33 @@ public class HelperClass {
         listView.setLayoutParams(params);
     }
 
-
+    /** This method set the input background tint to @param id
+     *
+     * @param editText the editText which is required
+     * @param error the error you need to show
+     * @param id the color of the background Tint
+     */
     void Input_Error( EditText editText, String error, int id) {
-        /*
-         * THIS CHECK IF BOTH THE FIELD IS NOT EMPTY
-         * AND SETTING THE ERROR AND COLOR OF BACKGROUND TINT AS RED
-         * */
         if(!(error==null)) {
             editText.setError(error);
         }
         editText.getBackground().setColorFilter(ContextCompat.getColor(mContext, id), PorterDuff.Mode.SRC_ATOP);
     }
+
+    /**
+     * Check if device is supporting Camera or Not
+     * @return boolean value
+     */
     boolean isDeviceSupportCamera() {
-        // this device has a camera
-// no camera on this device
         return mContext.getPackageManager().hasSystemFeature(
                 PackageManager.FEATURE_CAMERA);
     }
 
+    /**
+     * CheckEmpty method is checking if the editText.getText().toString is empty or not
+     * @param editText The editText required for check
+     * @return true/false deping if empty or not
+     */
     boolean CheckEmpty(EditText editText){
         String editval=editText.getText().toString().trim();
         TextInputLayout layout= (TextInputLayout) editText.getParentForAccessibility();
@@ -109,6 +137,10 @@ public class HelperClass {
         return false;
     }
 
+    /**Check_Internet method check if device is connected to Internet or not
+     *
+     * @return true/false determine if Internet is connected
+     */
     public boolean Check_Internet(){
         ConnectivityManager cm = (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         assert cm != null;
@@ -120,26 +152,35 @@ public class HelperClass {
         return connected;
     }
 
+    /**
+     * Load_Fragment is used to show
+     * @see LoadingDialog
+     * This is progress bar showed in Dialog box
+     * @param load TRUE/FALSE Determine to load or not
+     * @param fm this is required parameter for FragmentManager
+     */
     public void load_Fragment(boolean load, android.support.v4.app.FragmentManager fm){
         if(load){
             if (prev == null) {
-                //STARTING THE LOADING_DIALOG DIALOG FRAGMENT IN WHICH
-                // THERE IS A PROGRESS BAR WHICH SHOWED FOR PROCESS
                 loadingDialog.show(fm, "loading_dialog");
-                //Log.d("sadder", "load");
             }
         }else{
             loadingDialog.dismiss();
         }
     }
 
-     void sendMessage(final String reciver,final String msg) {
+    /**
+     * This method is used to send recovery code to receiver email
+     * @param receiver the email of the user
+     * @param msg the code send to that email
+     */
+     void sendMessage(final String receiver,final String msg) {
         Thread sender = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     GmailSender sender = new GmailSender("mjordansite@gmail.com", "nehal123");
-                    sender.sendMail("Forget Password MukBangCode", msg, "mjordansite@gmail.com", reciver);
+                    sender.sendMail("Forget Password MukBangCode", msg, "mjordansite@gmail.com", receiver);
                 } catch (Exception e) {
                     Log.e("zxc Log MSG ERROR:::", "Error: " + e.getMessage());
                 }
