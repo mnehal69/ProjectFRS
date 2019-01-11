@@ -38,28 +38,39 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     String server_url;
     TextInputLayout userNameLayout,userEmailLayout,userPassLayout;
     MKB_DB dbHelper;
-
     HelperClass helperClass;
+    /**This is the main method of this activity in which everything is done in this method
+     * @param savedInstanceState
+     * <h1>Register Activity</h1>
+     * <p> This activity allow user to register user</p>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        helperClass=new HelperClass(this);
+        dbHelper = new MKB_DB(this);
+
         server_url=getResources().getString(R.string.website)+"user/add.php" ;
+
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(this,R.color.Background));
-        UserEmail=(EditText) findViewById(R.id.REmail);
-        UserName=(EditText) findViewById(R.id.RUName);
-        UserPassword=(EditText) findViewById(R.id.RPass);
-        closeBtn = (ImageButton) findViewById(R.id.close_btn);
-        RegisterBtn=(Button)findViewById(R.id.Register);
+
+        UserEmail= findViewById(R.id.REmail);
+        UserName= findViewById(R.id.RUName);
+        UserPassword= findViewById(R.id.RPass);
+        closeBtn = findViewById(R.id.close_btn);
+        RegisterBtn= findViewById(R.id.Register);
+
+        userEmailLayout= findViewById(R.id.REmailLayout);
+        userNameLayout= findViewById(R.id.RNameLayout);
+        userPassLayout= findViewById(R.id.RPassLayout);
+
         closeBtn.setOnClickListener(this);
         RegisterBtn.setOnClickListener(this);
-        userEmailLayout=(TextInputLayout) findViewById(R.id.REmailLayout);
-        userNameLayout=(TextInputLayout) findViewById(R.id.RNameLayout);
-        userPassLayout=(TextInputLayout) findViewById(R.id.RPassLayout);
 
-        helperClass=new HelperClass(this);
 
         UserEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -86,27 +97,31 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 }
             }
         });
-        dbHelper = new MKB_DB(this);
+
     }
 
-    public void fetch(final String Email, final String Name, final String Password) {
-        /*
-         *
-         * VOLLEY PASS THE PARAMETER (WHICH ARE IN GET_PARAMS) TO SERVER_URL
-         * USTING GET OR POST METHOD AND THEN RECEIVE THE RESPONSE OF THE WEBSITE
-         * */
+    /**
+     * Register method pass these parameters
+     * @param Email the email provided by user through EditText
+     * @param Name  the name provided by user through EditText
+     * @param Password the password provided by user through EditText
+     * to Restful api (server_url)
+     * through
+     * @see Volley
+     */
+    private void register(final String Email, final String Name, final String Password) {
         final FragmentManager fm = getSupportFragmentManager();
         helperClass.load_Fragment(true,fm);
+
         if (helperClass.Check_Internet()){
-            // Instantiate the RequestQueue.
+
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-            // Request a string response from the provided URL.
             StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Log.d("zxc msg:", response);
-                            // Display the first 500 characters of the response string.
+
+
                             try {
                                 JSONObject jObject = new JSONObject(response);
                                 boolean isRegister = jObject.getBoolean("IsRegister");
@@ -118,20 +133,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                     startActivity(main);
                                 }else{
                                     Log.d("zxc","NOT REGISTER");
-                                    //Toast.makeText(getApplicationContext(),jObject.getString("Error"),Toast.LENGTH_SHORT).show();
                                     helperClass.Input_Error(UserEmail,jObject.getString("Error"),R.color.ErrorDialog);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                Log.d("zxc",e.getMessage());
                             }
-                            helperClass.load_Fragment(false,fm);                        }
+
+
+                            helperClass.load_Fragment(false,fm);
+                        }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
-                    Log.d("sadder error:", "That didn't work!");
-                    helperClass.load_Fragment(false,fm);                }
+                    Toast.makeText(getApplicationContext(), "Something went wrong!Please try to register again!", Toast.LENGTH_SHORT).show();
+                    helperClass.load_Fragment(false,fm);
+                }
             }) {
 
                 @Override
@@ -143,7 +159,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     return params;
                 }
             };
-            // Add the request to the RequestQueue.
+
             queue.add(stringRequest);
         }
     }
@@ -161,7 +177,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 String password=UserPassword.getText().toString().trim();
                 boolean checked=helperClass.CheckEmpty(UserEmail) || helperClass.CheckEmpty(UserName) || helperClass.CheckEmpty(UserPassword);
                 if(!(checked)){
-                    fetch(email,name,password);
+                    register(email,name,password);
                 }
                 break;
         }

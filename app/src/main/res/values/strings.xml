@@ -17,7 +17,7 @@
     <string name="username">UserName</string>
     <string name="register_with_mukbang_account">Register with MukBang Account</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="forget_title">Forget Mukbang Password</string>
     <string name="code">Code</string>
@@ -80,4 +80,6 @@
     <string name="delivery_fee">Delivery Fee:</string>
     <string name="_200_pkr">200 PKR</string>
     <string name="empty" />
+    <string name="anything_to_say">Anything to say?</string>
+    <string name="done_saying">Done Saying?</string>
 </resources>

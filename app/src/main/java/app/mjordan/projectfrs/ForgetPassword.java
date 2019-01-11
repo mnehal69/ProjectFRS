@@ -39,26 +39,32 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
     ImageButton closeBtn;
     HelperClass helperClass;
     String MasterCode;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
-        Email=(EditText) findViewById(R.id.FEmail);
-        Code=(EditText)findViewById(R.id.FCode);
-        Pass=(EditText)findViewById(R.id.FPass);
-        ConfirmPass=(EditText) findViewById(R.id.FConfirmPass);
 
-        EmailView=(LinearLayout)findViewById(R.id.EmailView);
-        CodeView=(LinearLayout)findViewById(R.id.CodeView);
-        PassView=(LinearLayout)findViewById(R.id.FPassView);
+        server_url=getResources().getString(R.string.website)+"user/";
 
-        ForgetBtn=(Button)findViewById(R.id.Check);
-        closeBtn = (ImageButton) findViewById(R.id.close_btn);
+        helperClass=new HelperClass(this);
+
+        Email= findViewById(R.id.FEmail);
+        Code= findViewById(R.id.FCode);
+        Pass= findViewById(R.id.FPass);
+        ConfirmPass= findViewById(R.id.FConfirmPass);
+
+        EmailView= findViewById(R.id.EmailView);
+        CodeView= findViewById(R.id.CodeView);
+        PassView= findViewById(R.id.FPassView);
+
+        ForgetBtn= findViewById(R.id.Check);
+        closeBtn = findViewById(R.id.close_btn);
 
         closeBtn.setOnClickListener(this);
         ForgetBtn.setOnClickListener(this);
-        server_url=getResources().getString(R.string.website)+"user/";
-        helperClass=new HelperClass(this);
+
         Email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -79,32 +85,38 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    // ***************************************
+    // Private Method
+    // ***************************************
+    /**
+     * Fetch_Code method pass the following parameters
+     * @param email the email provided by user
+     * through
+     *@see Volley
+     *to Server from which a recovery code is gernatered and send
+     * back to app as json.
+     * Apart from sending email,this method is also sending the recovery code
+     * send by server to the user email address.
+     * A Custom Dialog Fragment is called with the function defined in
+     * @see HelperClass
+     */
 
-
-    public void fetch_code(final String email) {
-        /*
-         *
-         * VOLLEY PASS THE PARAMETER (WHICH ARE IN GET_PARAMS) TO SERVER_URL
-         * USTING GET OR POST METHOD AND THEN RECEIVE THE RESPONSE OF THE WEBSITE
-         * */
-            //STARTING THE LOADING_DIALOG DIALOG FRAGMENT IN WHICH
-            // THERE IS A PROGRESS BAR WHICH SHOWED FOR PROCESS
+    private void fetch_code(final String email) {
             final FragmentManager fm = getSupportFragmentManager();
             helperClass.load_Fragment(true,fm);
+
         if (helperClass.Check_Internet()) {
-            //Log.d("zxc",server_url);
-            // Instantiate the RequestQueue.
+
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-            // Request a string response from the provided URL.
             StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url+"Forget.php",
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            // Display the first 500 characters of the response string.
-                            //Log.d("zxc msg:", response);
+
                             try {
                                 JSONObject jObject = new JSONObject(response);
                                 boolean CodeSend=jObject.getBoolean("CodeSend");
+
                                 if(CodeSend){
                                     MasterCode=jObject.getString("Code");
                                     helperClass.sendMessage(email,"MukBang Forget Code: "+MasterCode);
@@ -114,10 +126,11 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
                                 }else{
                                     helperClass.Input_Error(Email,jObject.getString("Error"),R.color.ErrorDialog);
                                 }
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                //Log.d("zxc",e.getMessage());
                             }
+
                             helperClass.load_Fragment(false,fm);
                         }
                     }, new Response.ErrorListener() {
@@ -135,39 +148,42 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
                     return params;
                 }
             };
-            // Add the request to the RequestQueue.
             queue.add(stringRequest);
+
         }else{
             helperClass.load_Fragment(false,fm);
         }
     }
 
-    public void change_pass(final String email, final String pass) {
-        /*
-         *
-         * VOLLEY PASS THE PARAMETER (WHICH ARE IN GET_PARAMS) TO SERVER_URL
-         * USTING GET OR POST METHOD AND THEN RECEIVE THE RESPONSE OF THE WEBSITE
-         * */
-        //STARTING THE LOADING_DIALOG DIALOG FRAGMENT IN WHICH
-        // THERE IS A PROGRESS BAR WHICH SHOWED FOR PROCESS
+
+
+    /**
+     * Fetch_Code method pass the following parameters
+     * @param email the email provided by user
+     * @param pass the new password provided by user
+     * through
+     *@see Volley
+     *to Server from which a json is send
+     * back to app and check if code is send in Volley's OnResponse Method.
+     * A Custom Dialog Fragment is called with the function defined in
+     * @see HelperClass
+     */
+    private void change_pass(final String email, final String pass) {
         final FragmentManager fm = getSupportFragmentManager();
         helperClass.load_Fragment(true,fm);
         if (helperClass.Check_Internet()) {
-            Log.d("zxc",server_url);
-            // Instantiate the RequestQueue.
+
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-            // Request a string response from the provided URL.
+
             StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url+"PassChange.php",
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            // Display the first 500 characters of the response string.
-                            Log.d("zxc msg:", response);
+
                             try {
                                 JSONObject jObject = new JSONObject(response);
                                 boolean CodeSend=jObject.getBoolean("PassChange");
                                 if(CodeSend){
-                                    Log.d("zxc","PASS CHANGED");
                                     Intent main = new Intent(ForgetPassword.this, Login.class);
                                     main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(main);
@@ -176,7 +192,6 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                Log.d("zxc",e.getMessage());
                             }
                             helperClass.load_Fragment(false,fm);
                         }
@@ -197,7 +212,6 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
                     return params;
                 }
             };
-            // Add the request to the RequestQueue.
             queue.add(stringRequest);
         }else{
             helperClass.load_Fragment(false,fm);

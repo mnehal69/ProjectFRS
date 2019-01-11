@@ -82,7 +82,9 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        dbHelper = new MKB_DB(getContext());
+        helperClass=new HelperClass(getContext());
 
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
@@ -92,8 +94,7 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        dbHelper = new MKB_DB(getContext());
-        helperClass=new HelperClass(getContext());
+
         SignIn= view.findViewById(R.id.SignIn);
         onLogin= view.findViewById(R.id.OnLogin);
         offLogin= view.findViewById(R.id.NotLogin);
@@ -102,10 +103,11 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
         userPic= view.findViewById(R.id.profile_image);
         listView= view.findViewById(R.id.list);
         ThemeSwitch= view.findViewById(R.id.ThemeSet);
-        helperClass=new HelperClass(getContext());
+
         server_url=getResources().getString(R.string.website)+"user/upload_image.php";
 
         Bundle bundle=getArguments();
+
         if(bundle!=null){
             type=bundle.getString("Type");
             json=bundle.getString("json");
@@ -124,10 +126,13 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
             }else{
                 ListType=0;
             }
-            //Log.d("zxc", String.valueOf(ListType));
+
             if(json!=null){
+
                 FragmentTransaction ft= Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+
                 Menu.setOnClickListener(new OnMenuProfileOverflowListerner(getContext(),type,listType,json,loginUsing,ft,night));
+
                 profileListArrayList=new ArrayList<>();
                 Gson gson = new Gson();
                 userData = gson.fromJson(json, User.class);
@@ -147,9 +152,6 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
                 }
                     Picasso.get().load(imgPath).into(userPic);
 
-                    Log.d("mb",userData.Avatar);
-                    Log.d("graph","https://graph.facebook.com/"+userData.ID+"/picture?type=large");
-
 
                 listView.setAdapter(customProfileAdapter);
             }
@@ -162,12 +164,15 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
             onLogin.setVisibility(View.GONE);
             offLogin.setVisibility(View.VISIBLE);
         }
+
         if(show){
             Done.setVisibility(View.VISIBLE);
         }else{
             Done.setVisibility(View.GONE);
         }
+
         helperClass.setListViewHeightBasedOnChildren(listView);
+
         Done.setOnClickListener(this);
         SignIn.setOnClickListener(this);
         userPic.setOnClickListener(this);
@@ -209,7 +214,6 @@ public class Profile extends Fragment implements View.OnClickListener, CompoundB
             cursor.moveToFirst();
             int columnIndex=cursor.getColumnIndex(filePathColumn[0]);
             mediaPath=cursor.getString(columnIndex);
-            Log.d("zxc",mediaPath);
             Picasso.get().load(uri.toString()).into(userPic);
             cursor.close();
         }

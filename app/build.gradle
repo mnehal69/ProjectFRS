@@ -22,6 +22,10 @@ android {
 dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.stepstone.apprating:app-rating:2.3.0'
+
+    implementation'com.github.sujithkanna:smileyrating:1.6.8'
+
     implementation 'com.facebook.android:facebook-login:4.39.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.android.support:appcompat-v7:27.1.1'

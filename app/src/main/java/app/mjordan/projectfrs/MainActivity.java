@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
 import android.widget.Toast;
 
@@ -29,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBottomNavListerner,ImageChoice.OnImageChoiceListerner,Profile.OnFragmentInteractionListener,Eat.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBottomNavListerner,ImageChoice.OnImageChoiceListener,Profile.OnFragmentInteractionListener,Eat.OnFragmentInteractionListener {
     MKB_DB dbHelper;
     HelperClass helperClass;
 
@@ -102,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
                         @Override
                         public void onResponse(String response) {
                             // Display the first 500 characters of the response string.
-                            Log.d("zxc msg:", response);
+                            //Log.d("zxc msg:", response);
                             try {
                                 JSONObject jObject = new JSONObject(response);
                                 obtainList =!(jObject.getBoolean("NoList"));
@@ -150,15 +149,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
                 Orderbundle.putIntegerArrayList("price",priceList);
                 order.setArguments(Orderbundle);
                 ft.replace(R.id.TabFragment,order);
-                Log.d("zxc","CASE1");
+                //Log.d("zxc","CASE1");
                 break;
             case 2:
-                Log.d("zxc","CASE2");
+                //Log.d("zxc","CASE2");
                 ft.replace(R.id.TabFragment,new LoadingMain());
                 fetch_list();
                 break;
             case 3:
-                Log.d("zxc","CASE3");
+                //Log.d("zxc","CASE3");
                 Profile profile=new Profile();
                 Bundle bundle=new Bundle();
                 list="List";
@@ -244,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
                         public void onResponse(String response) {
                             // Display the first 500 characters of the response string.
 
-                            Log.d("sadder msg:", response);
+                            //Log.d("sadder msg:", response);
                             try {
                                 JSONObject jObject = new JSONObject(response);
                                 boolean update = jObject.getBoolean("IsUpdate");
@@ -300,7 +299,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
     @Override
     public void BottomNavChangeTav(int tab) {
         BottomNavBar frag = (BottomNavBar) getSupportFragmentManager().findFragmentById(R.id.Fragment);
-        frag.TabChanged(tab);
+        if (frag != null) {
+            frag.TabChanged(tab);
+        }
     }
 
     @Override

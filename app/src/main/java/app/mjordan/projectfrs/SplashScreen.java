@@ -4,7 +4,7 @@ package app.mjordan.projectfrs;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
+
 import android.support.annotation.Nullable;
 
 import android.support.v4.app.FragmentManager;
@@ -33,11 +33,43 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * <h1>SplashScreen</h1>
+ * This activity is used to check if user is login or not
+ * SplashScreen of this project
+ * @author Mirza Nehal baig 19-10607
+ * @author Osman Shaikh 19-10615
+ * @version 1.0
+ * @since 1/11/2018
+ */
 public class SplashScreen extends AppCompatActivity {
+    //********************************************
+    // Constants and variable
+    //******************************************
+    /**
+     * Restful Api link
+     */
     private String server_url;
+
     HelperClass helperClass;
+    /**
+        SharedPreferences used for day/night theme
+     */
     SharedPreferences sharedpreferences;
     public static final String MyPREFERENCES = "Theme" ;
+
+    // ***********************************************
+    // OnCreate
+    // ***********************************************
+
+    /**
+     * This is the main method of this activity in which everything is done in this method
+     * @param savedInstanceState
+     * Checking if login is with facebook by access token is in shared prefrences which is then used to retrieve user information
+     *by Graph API and then checked if it's in Restful API of this app and if not by facebook, the id of the user
+     * which is saved by user is fetched from local database and then by user id ,user information is retrieve through
+     * online Restful API.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,10 +93,9 @@ public class SplashScreen extends AppCompatActivity {
        }
 
         helperClass=new HelperClass(this);
+
         if(isLoggedIn){
             server_url=getResources().getString(R.string.website)+"user/fb_check_add.php";
-            //String link="https://graph.facebook.com/me?fields=picture,email,name&access_token="+accessToken;
-            //Log.d("zxc",link);
             GraphRequest request =  GraphRequest.newMeRequest(
                     accessToken, new GraphRequest.GraphJSONObjectCallback() {
                         @Override
@@ -74,18 +105,7 @@ public class SplashScreen extends AppCompatActivity {
                                 String ID = me.optString("id");
                                 String name= me.optString("name");
                                 String email= me.optString("email");
-                                JSONObject picture =response.getJSONObject().optJSONObject("picture");
-
-                                try {
-                                    JSONObject data=picture.getJSONObject("data");
-                                    String url=data.getString("url");
-                                    Log.d("zxcv",ID+name+email+url);
-                                    fb_server_fetch(ID,name,email,url);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-
+                                    fb_server_fetch(ID,name,email);
                             }
                         }
                     });
@@ -96,48 +116,48 @@ public class SplashScreen extends AppCompatActivity {
             request.executeAsync();
         }else {
             server_url=getResources().getString(R.string.website)+"user/check.php";
-            Log.d("sadder", String.valueOf(dbHelper.getCount()));
 
             if (dbHelper.getCount() == 0) {
                 Intent next = new Intent(this, Login.class); //This is used to move to next activity
                 startActivity(next);
                 finish();
             } else {
-                Log.d("sadder USERID", dbHelper.get_UserLoggedID());
                 fetch(dbHelper.get_UserLoggedID());
                 dbHelper.close();
             }
         }
     }
 
+    // ***********************************************
+    //  Private Method
+    // ***********************************************
 
-    public void fb_server_fetch(final String id, final String name, final String email, final String picture) {
-        /*
-         *
-         * VOLLEY PASS THE PARAMETER (WHICH ARE IN GET_PARAMS) TO SERVER_URL
-         * USTING GET OR POST METHOD AND THEN RECEIVE THE RESPONSE OF THE WEBSITE
-         * */
-        Log.d("LoginUsing","yup");
+    /**
+     * fb_server_fetch is storing the information obtained from Graph API to online restful api using
+     * @see Volley
+     * by passing following parameters
+     * @param id the facebook user id obtained from acess token by Graph API
+     * @param name the facebook user name obtained from acess token by Graph API
+     * @param email the facebook user email obtained from acess token by Graph API
+     * to @literal server_url and then passing it to MainActivity using intent
+     */
+    private void fb_server_fetch(final String id, final String name, final String email) {
 
         final FragmentManager fm = getSupportFragmentManager();
         if (helperClass.Check_Internet()) {
-            // Instantiate the RequestQueue.
+
             final RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-            // Request a string response from the provided URL.
+
             final StringRequest stringRequest = new StringRequest(Request.Method.POST,server_url,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            // Display the first 500 characters of the response string.
 
-                            Log.d("zxcv",response);
                             try {
                                 JSONObject jObject  = new JSONObject(response);
                                 boolean IsSuccess = jObject.getBoolean("IsFb");
-                                Log.d("zxcv", String.valueOf(IsSuccess));
                                 if (IsSuccess) {
                                     JSONObject User = jObject.getJSONObject("User");
-                                    Log.d("zxcv",User.toString());
                                     Intent main = new Intent(SplashScreen.this, MainActivity.class);
                                     main.putExtra("Type","User");
                                     main.putExtra("UserData",User.toString());
@@ -155,7 +175,6 @@ public class SplashScreen extends AppCompatActivity {
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(getApplicationContext(), "Something went wrong! Please Login again", Toast.LENGTH_SHORT).show();
                     LoginManager.getInstance().logOut();
-                    Log.d("zxcv error:", "That didn't work!");
                 }
             }) {
 
@@ -168,28 +187,25 @@ public class SplashScreen extends AppCompatActivity {
                     return params;
                 }
             };
-            // Add the request to the RequestQueue.
             queue.add(stringRequest);
         }
     }
 
 
-
-
-
-
-    public void fetch(final String UserID) {
+    /**
+     * Fetch is obtaining user information through
+     * @see Volley
+     * by passing the
+     * @param UserID the userID stored in local Database
+     * and then passing it to MainActivity using intent
+     */
+    private void fetch(final String UserID) {
         if (helperClass.Check_Internet()) {
-            // Instantiate the RequestQueue.
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-            // Request a string response from the provided URL.
             StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            // Display the first 500 characters of the response string.
-
-                            Log.d("sadder msg:", response);
                             try {
                                 JSONObject jObject = new JSONObject(response);
                                 boolean isLogged = jObject.getBoolean("isLogged");

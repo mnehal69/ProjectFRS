@@ -12,14 +12,18 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is used to check and ask the user for the permission for the app to work.
+ * Not my code, it's a custom code written by someone.
+ */
 public class PersmissionUtils {
 
-        public static final int REQUEST_PERMISSION_MULTIPLE = 0;
-        public static final int REQUEST_PERMISSION_CAMERA = 1;
-        public static final int REQUEST_PERMISSION_LOCATION = 2;
-        public static final int REQUEST_WRITE_EXTERNAL = 3;
+        private static final int REQUEST_PERMISSION_MULTIPLE = 0;
+        private static final int REQUEST_PERMISSION_CAMERA = 1;
+        private static final int REQUEST_PERMISSION_LOCATION = 2;
+        private static final int REQUEST_WRITE_EXTERNAL = 3;
 
-        public static boolean checkAndRequestPermissions(Activity activity) {
+        public static void checkAndRequestPermissions(Activity activity) {
             System.out.println("PermissionsUtils checkAndRequestPermissions()");
 
             int permissionCamera = ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA);
@@ -54,10 +58,8 @@ public class PersmissionUtils {
                 ActivityCompat.requestPermissions(activity,
                         listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),
                         REQUEST_PERMISSION_MULTIPLE);
-                return false;
             }
 
-            return true;
         }
 
         /**

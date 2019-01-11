@@ -3,6 +3,13 @@ package app.mjordan.projectfrs;
 import java.security.AccessController;
 import java.security.Provider;
 
+/**
+ * This class is used along with GMailSender
+ * I don't know for what purpose
+ * Not my code, but code from Internet
+ * I used it because the PHP Restful API was taking too long to send email
+ * and Volley was returning null.
+ */
 class JSSEProvider extends Provider {
 
     JSSEProvider() {

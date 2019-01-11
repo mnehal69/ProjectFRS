@@ -1,5 +1,5 @@
 package app.mjordan.projectfrs;
-import android.app.Fragment;
+
 
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -24,8 +24,7 @@ import com.android.volley.VolleyError;
 
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.facebook.CallbackManager;
-import com.facebook.login.widget.LoginButton;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,7 +32,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class LoginWithEmail extends AppCompatActivity implements View.OnClickListener {
+
     EditText username,password;
     ImageButton closeBtn;
     Button ForgetBtn,RegisterBtn,LoginBtn;
@@ -41,6 +42,14 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
     TextInputLayout userEmailLayout,PassLayout;
     MKB_DB dbHelper;
     HelperClass helperClass;
+
+    /**This is the main method of this activity in which everything is done in this method
+     * @param savedInstanceState
+     * <h1>Login with Email Activity</h1>
+     * <pre> This activity provide authorization to registered user and
+     * provide option to register and recover password if forget
+     * </pre>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,14 +69,16 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
         LoginBtn= findViewById(R.id.LoginBtn);
         userEmailLayout= findViewById(R.id.UserEmailLayout);
         PassLayout= findViewById(R.id.PassLayout);
-        /*username.requestFocus();*/
+
+
         closeBtn.setOnClickListener(this);
         RegisterBtn.setOnClickListener(this);
         LoginBtn.setOnClickListener(this);
         ForgetBtn.setOnClickListener(this);
 
+        helperClass=new HelperClass(this);
+        dbHelper = new MKB_DB(this);
 
-         helperClass=new HelperClass(this);
 
         username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -87,57 +98,59 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        dbHelper = new MKB_DB(this);
+
     }
 
 
 
 
 
-
-     public void fetch(final String user, final String pass) {
-         /*
-          *
-          * VOLLEY PASS THE PARAMETER (WHICH ARE IN GET_PARAMS) TO SERVER_URL
-          * USTING GET OR POST METHOD AND THEN RECEIVE THE RESPONSE OF THE WEBSITE
-          * */
-
+    /**
+     * Fetch method is checking if user is authorized or not through
+     * @see Volley
+     * by passing the
+     * @param user the userName or UserEmail provided by user through EditText
+     * @param pass the password of the account
+     * to server_url and if user is authorized, this method is saving user id to local database and
+     *  passing it to MainActivity through
+     * @see Intent
+     */
+     private void fetch(final String user, final String pass) {
          final FragmentManager fm = getSupportFragmentManager();
          helperClass.load_Fragment(true,fm);
          if (helperClass.Check_Internet()) {
-             // Instantiate the RequestQueue.
              RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-             // Request a string response from the provided URL.
              StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url,
                      new Response.Listener<String>() {
                          @Override
                          public void onResponse(String response) {
-                             // Display the first 500 characters of the response string.
-
-                             Log.d("sadder msg:", response);
                              try {
                                  JSONObject jObject = new JSONObject(response);
                                  boolean notFound = jObject.getBoolean("IsEmpty");
                                  if (!notFound) {
+
                                      boolean samePass = jObject.getBoolean("SamePass");
+
                                      if (!samePass) {
                                          helperClass.Input_Error(password,"Incorrect Password",R.color.ErrorDialog);
+                                        }
+                                        else {
+
+                                             JSONObject User = jObject.getJSONObject("User");
+                                             dbHelper.Insert_IsLogged(User.getString("ID"));
+                                             Intent main = new Intent(LoginWithEmail.this, MainActivity.class);
+                                             main.putExtra("Type","User");
+                                             main.putExtra("LoginUsing","Email");
+                                             main.putExtra("UserData",User.toString());
+                                             main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                             startActivity(main);
+                                             dbHelper.close();
+                                        }
+
                                      } else {
-
-                                         JSONObject User = jObject.getJSONObject("User");
-                                         dbHelper.Insert_IsLogged(User.getString("ID"));
-                                         Intent main = new Intent(LoginWithEmail.this, MainActivity.class);
-                                         main.putExtra("Type","User");
-                                         main.putExtra("LoginUsing","Email");
-                                         main.putExtra("UserData",User.toString());
-                                         main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                         startActivity(main);
-                                         dbHelper.close();
-                                     }
-
-                                 } else {
                                      helperClass.Input_Error(username,"Invalid Email",R.color.ErrorDialog);
                                  }
+
 
                              } catch (JSONException e) {
                                  e.printStackTrace();
@@ -148,7 +161,6 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
                  @Override
                  public void onErrorResponse(VolleyError error) {
                      Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
-                     //Log.d("sadder error:", "That didn't work!");
                      helperClass.load_Fragment(false,fm);
                  }
              }) {
@@ -161,18 +173,12 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
                      return params;
                  }
              };
-             // Add the request to the RequestQueue.
              queue.add(stringRequest);
          }else{
              helperClass.load_Fragment(false,fm);
          }
      }
     void ClearFocus(EditText editText){
-        /*
-        * This fuction is used to unfocus both edit text and called when user
-        * click login button in LoginWithEmail Screen
-        *
-         */
         editText.clearFocus();
     }
 
@@ -197,7 +203,6 @@ public class LoginWithEmail extends AppCompatActivity implements View.OnClickLis
                 startActivity(intent);
                 break;
             case R.id.RegisterLogin:
-                //GOING TO REGISTERActivity
                 Intent nextActivity=new Intent(this,RegisterActivity.class);
                 startActivity(nextActivity);
                 break;

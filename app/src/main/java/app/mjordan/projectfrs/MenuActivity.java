@@ -23,6 +23,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.hsalf.smilerating.SmileRating;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -69,6 +70,7 @@ public class MenuActivity extends AppCompatActivity implements Counter.OnFragmen
             portrait=true;
         }
         ft.commit();
+
 
 
 

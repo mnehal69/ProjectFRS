@@ -28,6 +28,11 @@ public class GmailSender extends javax.mail.Authenticator {
         Security.addProvider(new JSSEProvider());
     }
 
+    /**
+     *  This class is used in ForgetPassword Activity to send a recovery code to the email user provided
+     * by the user
+     *
+     */
     GmailSender(String user, String password) {
         this.user = user;
         this.password = password;
