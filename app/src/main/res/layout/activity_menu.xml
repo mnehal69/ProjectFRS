@@ -41,7 +41,7 @@
                     android:contentDescription="@string/imagelogo" />
             </FrameLayout>
             <android.support.v7.widget.RecyclerView
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/menu_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

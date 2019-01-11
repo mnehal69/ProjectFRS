@@ -9,6 +9,6 @@ import retrofit2.http.Part;
 
 interface ApiConfig {
     @Multipart
-    @POST("FRS/user/upload_image.php")
+    @POST("/user/upload_image.php")
     Call<ServerResponse> uploadFile(@Part MultipartBody.Part file);
 }

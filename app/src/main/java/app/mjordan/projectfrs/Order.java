@@ -9,7 +9,6 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,7 @@ public class Order extends Fragment {
     RecyclerView orderList;
     NestedScrollView Order;
     LinearLayout noOrder;
-    TextView bill,fees,totalbill;
+    TextView bill,fees, total_bill;
     int total=0,fee=200,total_amount;
     ImageButton close;
     private ArrayList<Menu> orderArrayList=new ArrayList<>();
@@ -66,8 +65,8 @@ public class Order extends Fragment {
         noOrder= view.findViewById(R.id.NoOrder);
         bill= view.findViewById(R.id.Bill);
         fees= view.findViewById(R.id.Fees);
-        totalbill= view.findViewById(R.id.TotalBill);
-        OrderFragmentInterface listerner= new OrderFragmentInterface() {
+        total_bill = view.findViewById(R.id.TotalBill);
+        OrderFragmentInterface listener= new OrderFragmentInterface() {
             @Override
             public void OrderChanged(String ID, int item) {
                 if (!ItemId.isEmpty()) {
@@ -81,37 +80,40 @@ public class Order extends Fragment {
                         }
                         bill.setText(String.valueOf(total));
                         total_amount=total+fee;
-                        totalbill.setText(String.valueOf(total_amount));
+                        total_bill.setText(String.valueOf(total_amount));
                     }
                 }
             }
         };
 
-        mAdapter = new CustomOrderAdapter(getContext(),orderArrayList,listerner);
+        mAdapter = new CustomOrderAdapter(getContext(),orderArrayList,listener);
         LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         orderList.setLayoutManager(layoutManager);
         orderList.setItemAnimator(new DefaultItemAnimator());
         orderList.setAdapter(mAdapter);
-        Log.d("mji","bundle PASS/NOT PASS");
+
+
         if(bundle!=null) {
             noOrder.setVisibility(View.GONE);
             Order.setVisibility(View.VISIBLE);
-            Log.d("mji","bundle pass");
             ItemId = bundle.getStringArrayList("Id");
             quantityList = bundle.getIntegerArrayList("item");
             NameList = bundle.getStringArrayList("name");
             priceList = bundle.getIntegerArrayList("price");
+
             for(int iterate=0;iterate<ItemId.size();iterate++){
                 orderArrayList.add(new Menu(true,false, ItemId.get(iterate),"","",NameList.get(iterate),quantityList.get(iterate).toString(),priceList.get(iterate).toString()));
                 total=total+(priceList.get(iterate)*quantityList.get(iterate));
             }
+
             bill.setText(String.valueOf(total));
             fees.setText(String.valueOf(fee));
             total_amount=total+fee;
-            totalbill.setText(String.valueOf(total_amount));
-            //Log.d("mji",orderArrayList.get(0).getProduct());
+            total_bill.setText(String.valueOf(total_amount));
             mAdapter.setOrder(orderArrayList);
         }
+
+
         if (orderArrayList.isEmpty()){
             noOrder.setVisibility(View.VISIBLE);
             Order.setVisibility(View.GONE);
@@ -119,6 +121,8 @@ public class Order extends Fragment {
             noOrder.setVisibility(View.GONE);
             Order.setVisibility(View.VISIBLE);
         }
+
+
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,7 +136,7 @@ public class Order extends Fragment {
                 Order.setVisibility(View.GONE);
             }
         });
-        Log.d("mji","bundle not pass");
+
         dbHelper.close();
     }
 

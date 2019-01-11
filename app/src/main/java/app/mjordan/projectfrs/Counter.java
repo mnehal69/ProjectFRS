@@ -1,7 +1,6 @@
 package app.mjordan.projectfrs;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,7 +16,7 @@ import android.widget.TextView;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link// Counter.OnFragmentInteractionListener} interface
+ * {@link Counter.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
 public class Counter extends DialogFragment implements View.OnClickListener {
@@ -36,7 +35,7 @@ public class Counter extends DialogFragment implements View.OnClickListener {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_counter, container, false);
@@ -45,21 +44,25 @@ public class Counter extends DialogFragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             Bundle bundle =getArguments();
-            add=(ImageView)view.findViewById(R.id.AddBtn);
-            remove=(ImageView)view.findViewById(R.id.RemoveBtn);
-            close=(ImageView)view.findViewById(R.id.close_btn);
-            title=(TextView) view.findViewById(R.id.title);
-            price=(TextView)view.findViewById(R.id.PriceShow);
-            title.setText(bundle.getString("item","null"));
-            quantity=(TextView) view.findViewById(R.id.Quantity);
-            item=Integer.parseInt(bundle.getString("value","0"));
-            quantity.setText(String.valueOf(item));
-            Id=bundle.getString("itemID","null");
-            name=bundle.getString("name","null");
-            itemPrice=Integer.parseInt(bundle.getString("Price","0"));
+            add= view.findViewById(R.id.AddBtn);
+            remove= view.findViewById(R.id.RemoveBtn);
+            close= view.findViewById(R.id.close_btn);
+            title= view.findViewById(R.id.title);
+            price= view.findViewById(R.id.PriceShow);
+            quantity= view.findViewById(R.id.Quantity);
+            if (bundle != null) {
+                title.setText(bundle.getString("item","null"));
+                item=Integer.parseInt(bundle.getString("value","0"));
+                quantity.setText(String.valueOf(item));
+                Id=bundle.getString("itemID","null");
+                name=bundle.getString("name","null");
+                itemPrice=Integer.parseInt(bundle.getString("Price","0"));
+            }
+
             add.setOnClickListener(this);
             remove.setOnClickListener(this);
             close.setOnClickListener(this);
+
             if(item>0){
                 total=item*itemPrice;
                 itemString=String.valueOf(item)+" X Rs"+String.valueOf(itemPrice)+" = Rs"+String.valueOf(total);
@@ -84,11 +87,7 @@ public class Counter extends DialogFragment implements View.OnClickListener {
                 quantity.setText(String.valueOf(item));
                 break;
             case R.id.close_btn:
-                if(item!=0 && Integer.parseInt(quantity.getText().toString())!=0){
-                    changed=false;
-                }else{
-                    changed=true;
-                }
+                changed = item == 0 || Integer.parseInt(quantity.getText().toString()) == 0;
                 mListener.UpdateOrder(changed,Id,name,item,itemPrice);
                 dismiss();
                 break;

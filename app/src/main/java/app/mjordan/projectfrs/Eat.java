@@ -2,28 +2,20 @@ package app.mjordan.projectfrs;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
+
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,20 +28,16 @@ import static android.app.Activity.RESULT_OK;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 
-///**
-// * A simple {@link Fragment} subclass.
-// * Activities that contain this fragment must implement the
-// * {@link Eat.OnFragmentInteractionListener} interface
-// * to handle interaction events.
-// */
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link Eat.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ *
+ */
 public class Eat extends Fragment {
     private OnFragmentInteractionListener mListener;
-    private RecyclerView PopularrecyclerView,ListRecycleView;
-    private ListView list;
     private ArrayList<Rest_List> rest_list = new ArrayList<>();
-    private PopularAdapter mAdapter;
-    private CustomListAdapter mListAdapter;
-    private Bundle bundle;
     private String res;
     private int MENU_ACTIVITY_ORDER=2;
     public Eat() {
@@ -60,8 +48,8 @@ public class Eat extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        bundle=getArguments();
-        if(bundle!=null) {
+        Bundle bundle = getArguments();
+        if(bundle !=null) {
             res = bundle.getString("Res");
         }
         // Inflate the layout for this fragment
@@ -99,19 +87,19 @@ public class Eat extends Fragment {
             }
         };
 
-        PopularrecyclerView= view.findViewById(R.id.recycler_view);
-        mAdapter = new PopularAdapter(listener,rest_list);
+        RecyclerView popularRecyclerView = view.findViewById(R.id.recycler_view);
+        PopularAdapter mAdapter = new PopularAdapter(listener, rest_list);
         LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        PopularrecyclerView.setLayoutManager(layoutManager);
-        PopularrecyclerView.setItemAnimator(new DefaultItemAnimator());
-        PopularrecyclerView.setAdapter(mAdapter);
+        popularRecyclerView.setLayoutManager(layoutManager);
+        popularRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        popularRecyclerView.setAdapter(mAdapter);
 
-        ListRecycleView= view.findViewById(R.id.ListRecycleView);
-        mListAdapter = new CustomListAdapter(listener,rest_list);
-        LinearLayoutManager ListlayoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        ListRecycleView.setLayoutManager(ListlayoutManager);
-        ListRecycleView.setItemAnimator(new DefaultItemAnimator());
-        ListRecycleView.setAdapter(mListAdapter);
+        RecyclerView listRecycleView = view.findViewById(R.id.ListRecycleView);
+        CustomListAdapter mListAdapter = new CustomListAdapter(listener, rest_list);
+        LinearLayoutManager LayoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        listRecycleView.setLayoutManager(LayoutManager);
+        listRecycleView.setItemAnimator(new DefaultItemAnimator());
+        listRecycleView.setAdapter(mListAdapter);
     }
 
 
@@ -127,13 +115,6 @@ public class Eat extends Fragment {
                 mListener.OrderFragment(id,name,item,price);
             }
         }
-    }
-
-
-
-    public interface RecyclerViewClickListener {
-        void onClick(View view, int position);
-
     }
 
 

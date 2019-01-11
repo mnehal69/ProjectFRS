@@ -12,11 +12,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link BottomNavBar.OnBottomNavListerner} interface
+ * to handle interaction events.
+ * This is custom bottom navigation which is used in MainActivity
+ */
 public class BottomNavBar extends Fragment implements View.OnClickListener {
     OnBottomNavListerner mListener;
     LinearLayout tab1,tab2,tab3;
     boolean portrait=true;
+
+
     public BottomNavBar(){}
 
 
@@ -30,7 +38,7 @@ public class BottomNavBar extends Fragment implements View.OnClickListener {
         try {
             mListener = (OnBottomNavListerner) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement OnBottomNavListerner");
+            throw new ClassCastException(context.toString() + " must implement OnBottomNavListener");
         }
     }
 
@@ -51,11 +59,9 @@ public class BottomNavBar extends Fragment implements View.OnClickListener {
         }else {
             portrait = false;
         }
-
-
-
         return view;
     }
+
 
     public void Tab_Icon(LinearLayout tab,int i){
         ImageView imageView;
