@@ -172,6 +172,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavBar.OnBo
         }
         ft.commit();
     }
+
+
     @Override
     public void image_select( Uri uri) {
         Profile frag = (Profile)

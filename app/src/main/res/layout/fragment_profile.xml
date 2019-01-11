@@ -8,6 +8,7 @@
     android:padding="20dp">
 
     <LinearLayout
+        android:background="@color/Background"
         android:visibility="visible"
         android:id="@+id/NotLogin"
         android:gravity="center"
@@ -45,6 +46,7 @@
 
     </LinearLayout>
     <LinearLayout
+        android:background="@color/Background"
         android:visibility="gone"
         android:id="@+id/OnLogin"
         android:layout_width="match_parent"
@@ -108,6 +110,7 @@
 
 
         <LinearLayout
+            android:background="@color/Background"
             android:layout_marginTop="40dp"
             android:id="@+id/SettingImage"
             android:layout_width="match_parent"
@@ -136,6 +139,7 @@
 
     <!--SWITCH TOGGLE-->
     <LinearLayout
+        android:background="@color/Background"
         android:layout_marginBottom="30dp"
         android:layout_alignParentBottom="true"
         android:paddingBottom="5dp"

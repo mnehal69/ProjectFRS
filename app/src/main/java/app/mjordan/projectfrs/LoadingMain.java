@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 
 /**
  * A simple {@link Fragment} subclass.
+ * The loading animated human Loading screen fragment
+ * which is shown in
+ * @see Eat Fragment
  */
 public class LoadingMain extends Fragment {
 
